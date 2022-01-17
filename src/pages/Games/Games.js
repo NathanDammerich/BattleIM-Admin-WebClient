@@ -20,6 +20,65 @@ import GameCard from "../../components/GameCard/GameCard";
 import DatePicker from "@mui/lab/DatePicker";
 import moment from "moment";
 
+const mockGames = [
+  {
+    location: "ABC",
+    league: "Basketball",
+    homeTeam: "home",
+    awayTeam: "away",
+    time: new Date("1/1/2020 1:00 pm").toString(),
+  },
+  {
+    location: "ABC",
+    league: "Basketball",
+    homeTeam: "home",
+    awayTeam: "away1",
+    time: new Date("1/1/2020 2:00 pm").toString(),
+  },
+  {
+    location: "XYZ",
+    league: "Basketball",
+    homeTeam: "home",
+    awayTeam: "away2",
+    time: new Date("1/1/2020 3:00 pm").toString(),
+  },
+  {
+    location: "XYZ",
+    league: "Basketball",
+    homeTeam: "home",
+    awayTeam: "away3",
+    time: new Date("1/1/2020 4:00 pm").toString(),
+  },
+  {
+    location: "ABC",
+    league: "Softball",
+    homeTeam: "home",
+    awayTeam: "away",
+    time: new Date("1/1/2020 5:00 pm").toString(),
+  },
+  {
+    location: "ABC",
+    league: "Softball",
+    homeTeam: "home",
+    awayTeam: "away1",
+    time: new Date("1/1/2020 6:00 pm").toString(),
+  },
+  {
+    location: "XYZ",
+    league: "Softball",
+    homeTeam: "home",
+    awayTeam: "away2",
+    time: new Date("1/1/2020 7:00 pm").toString(),
+  },
+  {
+    location: "XYZ",
+    league: "Softball",
+    homeTeam: "home",
+    awayTeam: "away3",
+    time: new Date("1/1/2020 8:00 pm").toString(),
+  },
+];
+
 const categorize = (category, data) => {
   const categorization = Object.fromEntries(data.map((v) => [v[category], []]));
   data.forEach((v) => {
@@ -42,70 +101,20 @@ export default function Games() {
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
   };
-  const games = [
-    {
-      location: "ABC",
-      league: "Basketball",
-      homeTeam: "home",
-      awayTeam: "away",
-      time: new Date("1/1/2020 1:00 pm").toString(),
-    },
-    {
-      location: "ABC",
-      league: "Basketball",
-      homeTeam: "home",
-      awayTeam: "away1",
-      time: new Date("1/1/2020 2:00 pm").toString(),
-    },
-    {
-      location: "XYZ",
-      league: "Basketball",
-      homeTeam: "home",
-      awayTeam: "away2",
-      time: new Date("1/1/2020 3:00 pm").toString(),
-    },
-    {
-      location: "XYZ",
-      league: "Basketball",
-      homeTeam: "home",
-      awayTeam: "away3",
-      time: new Date("1/1/2020 4:00 pm").toString(),
-    },
-    {
-      location: "ABC",
-      league: "Softball",
-      homeTeam: "home",
-      awayTeam: "away",
-      time: new Date("1/1/2020 5:00 pm").toString(),
-    },
-    {
-      location: "ABC",
-      league: "Softball",
-      homeTeam: "home",
-      awayTeam: "away1",
-      time: new Date("1/1/2020 6:00 pm").toString(),
-    },
-    {
-      location: "XYZ",
-      league: "Softball",
-      homeTeam: "home",
-      awayTeam: "away2",
-      time: new Date("1/1/2020 7:00 pm").toString(),
-    },
-    {
-      location: "XYZ",
-      league: "Softball",
-      homeTeam: "home",
-      awayTeam: "away3",
-      time: new Date("1/1/2020 8:00 pm").toString(),
-    },
-  ];
+  const games = mockGames;
 
-  const categorization = categorize(
-    category,
-    games?.filter((v) =>
-      v[category].toUpperCase().includes(deferredFilter.toUpperCase())
-    ) ?? []
+  const categorization = React.useMemo(
+    () => categorize(category, games ?? []),
+    [games, category]
+  );
+  const filteredSortedCategories = React.useMemo(
+    () =>
+      Object.entries(categorization)
+        .filter(([label]) =>
+          label.toUpperCase().includes(deferredFilter.toUpperCase())
+        )
+        .sort(([a], [b]) => (a > b ? 1 * sortDirection : -1 * sortDirection)),
+    [categorization, deferredFilter, sortDirection]
   );
 
   const SortMenuItem = ({ value, label }) => {
@@ -174,15 +183,13 @@ export default function Games() {
         </Box>
       </Box>
       <Grid container spacing={1}>
-        {Object.entries(categorization)
-          .sort(([a], [b]) => (a > b ? 1 * sortDirection : -1 * sortDirection))
-          .map(([label, games]) => {
-            return (
-              <Grid item xs={12} md={6} lg={4}>
-                <GameCard games={games} label={label} />
-              </Grid>
-            );
-          })}
+        {filteredSortedCategories.map(([label, games]) => {
+          return (
+            <Grid item xs={12} md={6} lg={4}>
+              <GameCard games={games} label={label} />
+            </Grid>
+          );
+        })}
       </Grid>
     </>
   );
