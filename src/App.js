@@ -3,6 +3,8 @@ import { Container, ThemeProvider } from "@material-ui/core";
 import { createTheme } from "@material-ui/core/styles";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import Adapter from '@mui/lab/AdapterMoment';
 
 import { getAdmin } from "./actions/admin";
 import Modal from "./components/Modal/Modal";
@@ -33,15 +35,17 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Container maxWidth="lg">
-          <Switch>
-            <Route path="/" exact component={Auth} />
-            <Route path="/home" exact component={Home} />
-          </Switch>
-          <Modal />
-        </Container>
-      </BrowserRouter>
+      <LocalizationProvider dateAdapter={Adapter}>
+        <BrowserRouter>
+          <Container maxWidth="lg">
+            <Switch>
+              <Route path="/" exact component={Auth} />
+              <Route path="/home" exact component={Home} />
+            </Switch>
+            <Modal />
+          </Container>
+        </BrowserRouter>
+      </LocalizationProvider>
     </ThemeProvider>
   );
 };

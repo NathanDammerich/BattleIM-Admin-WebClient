@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  /* baseURL: "https://battleim-backend.herokuapp.com/", */
-  baseURL: "https://localhost:5000",
+  baseURL: "https://battleim-backend.herokuapp.com/",
+  // baseURL: "https://localhost:5000",
 });
 
 export const getGames = () => API.get("/games");

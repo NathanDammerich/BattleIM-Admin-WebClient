@@ -49,7 +49,7 @@ export default function useFetchData(
     } else {
       fetchData(dataID).then((res) => setData(res.data));
     }
-  }, [dataFromParent, dataID, identifier]);
+  }, [dataFromParent, dataID, identifier, body]);
 
   return [data, setData];
 }

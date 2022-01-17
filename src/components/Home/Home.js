@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Grid } from "@material-ui/core";
 
 import Navbar from "../Navbar/Navbar";
-import Upcoming from "../Upcoming/Upcoming";
 import Teams from "../Teams/Teams";
 import Leagues from "../Leagues/Leagues";
 import useStyles from "./styles";
