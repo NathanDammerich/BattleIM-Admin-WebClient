@@ -1,7 +1,6 @@
 import {
   Grid,
   TextField,
-  IconButton,
   Button,
   Box,
   Menu,
@@ -9,16 +8,14 @@ import {
   ListItemText,
   ListItemIcon,
 } from "@material-ui/core";
-import Next from "@mui/icons-material/KeyboardArrowRight";
-import Previous from "@mui/icons-material/KeyboardArrowLeft";
 import Sort from "@mui/icons-material/Sort";
 import React, { useState } from "react";
 import useFetchData from "../../hooks/useFetchData";
 import { useDeferred } from "../../hooks/useDeferred";
 import GameCard from "../../components/GameCard/GameCard";
 // import { useSelector } from "react-redux";
-import DatePicker from "@mui/lab/DatePicker";
 import moment from "moment";
+import SimpleDatePicker from "../../components/SimpleDatePicker/SimpleDatePicker";
 
 const mockGames = [
   {
@@ -165,22 +162,7 @@ export default function Games() {
             <SortMenuItem label="League" value="league" />
           </Menu>
         </Box>
-        <Box display="flex" alignItems="center">
-          <IconButton onClick={handleChangeDay(-1)}>
-            <Previous />
-          </IconButton>
-          <DatePicker
-            label="Pick Date"
-            value={date}
-            onChange={setDate}
-            renderInput={(params) => (
-              <TextField variant="outlined" {...params} />
-            )}
-          />
-          <IconButton onClick={handleChangeDay(1)}>
-            <Next />
-          </IconButton>
-        </Box>
+        <SimpleDatePicker onChange={setDate} value={date} />
       </Box>
       <Grid container spacing={1}>
         {filteredSortedCategories.map(([label, games]) => {
