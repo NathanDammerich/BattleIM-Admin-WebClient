@@ -13,6 +13,30 @@ import MakeTeam from "../Leagues/MakeTeam/MakeTeam";
 import User from "../User/User";
 import LeagueCard from "../LeagueCard/LeagueCard";
 
+const modalTypeToComponent = {
+  Game: GameCard,
+  Team: TeamCard,
+  League: League,
+  Quiz: Quiz,
+  MakeTeam: MakeTeam,
+  User: User,
+  LeagueCard: LeagueCard,
+};
+
+const modalTypeToParams = {
+  Game: (modal) => ({ gameID: modal.id }),
+  Team: (modal) => ({
+    teamFromParent: null,
+    teamID: modal.id,
+    startExpanded: true,
+  }),
+  League: (modal) => ({ leagueID: modal.id }),
+  Quiz: (modal) => ({ quizID: modal.id }),
+  MakeTeam: (modal) => ({ divisionID: modal.id }),
+  User: () => ({}),
+  LeagueCard: (modal) => ({ leagueID: modal.id }),
+};
+
 export default function Modal() {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -22,6 +46,10 @@ export default function Modal() {
   const closeModal = () => {
     dispatch(removeModal());
   };
+
+  const topModal = modal.at(-1);
+  const ModalComponent = modalTypeToComponent[topModal?.type];
+  const modalParams = modalTypeToParams[topModal?.type];
 
   return ReactDom.createPortal(
     <>
@@ -34,24 +62,8 @@ export default function Modal() {
             onClick={(e) => e.stopPropagation()}
             align="center"
           >
-            {modal[modal.length - 1].type === "Game" ? (
-              <GameCard gameID={modal[modal.length - 1].id} />
-            ) : modal[modal.length - 1].type === "Team" ? (
-              <TeamCard
-                teamFromParent={null}
-                teamID={modal[modal.length - 1].id}
-                startExpanded={true}
-              />
-            ) : modal[modal.length - 1].type === "League" ? (
-              <League leagueID={modal[modal.length - 1].id} />
-            ) : modal[modal.length - 1].type === "Quiz" ? (
-              <Quiz quizID={modal[modal.length - 1].id} />
-            ) : modal[modal.length - 1].type === "MakeTeam" ? (
-              <MakeTeam divisionID={modal[modal.length - 1].id} />
-            ) : modal[modal.length - 1].type === "User" ? (
-              <User />
-            ) : modal[modal.length - 1].type === "LeagueCard" ? (
-              <LeagueCard leagueID={modal[modal.length - 1].id} />
+            {ModalComponent && modalParams ? (
+              <ModalComponent {...modalParams} />
             ) : (
               <h1>unrecognized modal type</h1>
             )}
