@@ -1,5 +1,5 @@
 import { Grid, Typography } from "@material-ui/core";
-import React from "react";
+import moment from 'moment';
 
 import { useDispatch } from "react-redux";
 
@@ -23,7 +23,7 @@ export default function GamesList({ games, teamID }) {
       game.opponent = game.awayTeam;
       game.opponentScore = game.results?.awayScore;
       game.userScore = game.results?.homeScore;
-    } else {
+    } else if (game.awayTeam._id === teamID) {
       game.opponent = game.homeTeam;
       game.opponentScore = game.results?.homeScore;
       game.userScore = game.results?.awayScore;
@@ -52,15 +52,18 @@ export default function GamesList({ games, teamID }) {
             >
               <Grid item xs={4}>
                 <Typography variant="body2">
-                  vs{" "}
                   <span className={classes.underline}>
-                    {game.opponent.name}
+                    {!game.opponent ? game.awayTeam : ''}
+                  </span>
+                  {' vs '}
+                  <span className={classes.underline}>
+                    {game.opponent?.name ?? game.homeTeam}
                   </span>
                 </Typography>
               </Grid>
               <Grid item xs={4}>
                 <Typography variant="body2">
-                  {game.time} {game.day}
+                  {moment(game.time).format('h:mm A')} {game.day}
                 </Typography>
               </Grid>
               {game.results ? (

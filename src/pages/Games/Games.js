@@ -7,18 +7,21 @@ import {
   MenuItem,
   ListItemText,
   ListItemIcon,
+  Typography,
+  Paper,
 } from "@material-ui/core";
 import Sort from "@mui/icons-material/Sort";
 import React, { useState } from "react";
 import useFetchData from "../../hooks/useFetchData";
 import { useDeferred } from "../../hooks/useDeferred";
-import GameCard from "../../components/GameCard/GameCard";
 // import { useSelector } from "react-redux";
 import moment from "moment";
 import SimpleDatePicker from "../../components/SimpleDatePicker/SimpleDatePicker";
+import GamesList from "../../components/Teams/TeamCard/GamesList/GamesList";
 
 const mockGames = [
   {
+    _id: "test123",
     location: "ABC",
     league: "Basketball",
     homeTeam: "home",
@@ -26,6 +29,7 @@ const mockGames = [
     time: new Date("1/1/2020 1:00 pm").toString(),
   },
   {
+    _id: "test123",
     location: "ABC",
     league: "Basketball",
     homeTeam: "home",
@@ -33,6 +37,7 @@ const mockGames = [
     time: new Date("1/1/2020 2:00 pm").toString(),
   },
   {
+    _id: "test123",
     location: "XYZ",
     league: "Basketball",
     homeTeam: "home",
@@ -40,6 +45,7 @@ const mockGames = [
     time: new Date("1/1/2020 3:00 pm").toString(),
   },
   {
+    _id: "test123",
     location: "XYZ",
     league: "Basketball",
     homeTeam: "home",
@@ -47,6 +53,7 @@ const mockGames = [
     time: new Date("1/1/2020 4:00 pm").toString(),
   },
   {
+    _id: "test123",
     location: "ABC",
     league: "Softball",
     homeTeam: "home",
@@ -54,6 +61,7 @@ const mockGames = [
     time: new Date("1/1/2020 5:00 pm").toString(),
   },
   {
+    _id: "test123",
     location: "ABC",
     league: "Softball",
     homeTeam: "home",
@@ -61,6 +69,7 @@ const mockGames = [
     time: new Date("1/1/2020 6:00 pm").toString(),
   },
   {
+    _id: "test123",
     location: "XYZ",
     league: "Softball",
     homeTeam: "home",
@@ -68,6 +77,7 @@ const mockGames = [
     time: new Date("1/1/2020 7:00 pm").toString(),
   },
   {
+    _id: "test123",
     location: "XYZ",
     league: "Softball",
     homeTeam: "home",
@@ -92,13 +102,16 @@ export default function Games() {
   const [sortDirection, setSortDirection] = useState(1);
   const [filter, setFilter] = useState("");
   const deferredFilter = useDeferred(filter, 300);
-  const handleChangeDay = (value) => () => {
-    setDate(moment(date).add(value, "day"));
-  };
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
   };
-  const games = mockGames;
+  const [fetchedGames] = useFetchData(
+    null,
+    "61d7b285969da7670fc7e962",
+    "orgGamesOnDate",
+    { date }
+  );
+  const games = fetchedGames || mockGames;
 
   const categorization = React.useMemo(
     () => categorize(category, games ?? []),
@@ -115,7 +128,6 @@ export default function Games() {
   );
 
   const SortMenuItem = ({ value, label }) => {
-    console.log("SortMenuItem");
     const handleSortMenuItem = () => {
       setSortDirection(category === value ? sortDirection * -1 : 1);
       setCategory(value);
@@ -168,7 +180,12 @@ export default function Games() {
         {filteredSortedCategories.map(([label, games]) => {
           return (
             <Grid item xs={12} md={6} lg={4}>
-              <GameCard games={games} label={label} />
+              <Paper>
+                <Box padding="5px">
+                  <Typography>{label}</Typography>
+                  <GamesList games={games} teamID="na" />
+                </Box>
+              </Paper>
             </Grid>
           );
         })}
