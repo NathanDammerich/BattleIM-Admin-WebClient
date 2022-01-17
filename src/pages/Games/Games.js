@@ -87,9 +87,9 @@ const mockGames = [
 ];
 
 const categorize = (category, data) => {
-  const categorization = Object.fromEntries(data.map((v) => [v[category], []]));
+  let categorization = {};
   data.forEach((v) => {
-    categorization[v[category]].push(v);
+    categorization[v[category]] = [...(categorization[v[category]] ?? []), v];
   });
   return categorization;
 };
