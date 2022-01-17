@@ -2,7 +2,7 @@ import React from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import useFetchData from "../../../hooks/useFetchData.js";
+import useFetchData from "../../../hooks/useFetchData";
 import { Button, Card, Typography, Grid } from "@material-ui/core";
 import { addModal } from "../../../actions/modals.js";
 import useStyles from "./styles.js";
