@@ -36,10 +36,10 @@ export default function GameCard({ gameFromParent, gameID }) {
 
   useEffect(() => {
     if (game) {
-      if (user.teams.includes(game.homeTeam._id)) {
+      if (user?.teams?.includes(game.homeTeam._id)) {
         setLeftTeam({ team: game.homeTeam, score: game.results?.homeScore });
         setRightTeam({ team: game.awayTeam, score: game.results?.awayScore });
-      } else if (user.teams.includes(game.awayTeam._id)) {
+      } else if (user?.teams?.includes(game.awayTeam._id)) {
         setLeftTeam({ team: game.awayTeam, score: game.results?.awayScore });
         setRightTeam({ team: game.homeTeam, score: game.results?.homeScore });
       } else {

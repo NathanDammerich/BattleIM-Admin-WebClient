@@ -49,7 +49,7 @@ export default function Modal() {
 
   const topModal = modal[modal.length - 1];
   const ModalComponent = modalTypeToComponent[topModal?.type];
-  const modalParams = modalTypeToParams[topModal?.type];
+  const modalParams = modalTypeToParams[topModal?.type]?.(topModal);
 
   return ReactDom.createPortal(
     <>
