@@ -14,7 +14,7 @@ import Sort from "@mui/icons-material/Sort";
 import React, { useState } from "react";
 import useFetchData from "../../hooks/useFetchData";
 import { useDeferred } from "../../hooks/useDeferred";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import moment from "moment";
 import SimpleDatePicker from "../../components/SimpleDatePicker/SimpleDatePicker";
 import GamesList from "../../components/Teams/TeamCard/GamesList/GamesList";
@@ -95,8 +95,8 @@ const categorize = (category, data) => {
 };
 
 export default function Games() {
-  // const admin = useSelector((state) => state.admin);
-  const [date, setDate] = useState(moment(new Date()));
+  const admin = useSelector((state) => state.admin);
+  const [date, setDate] = useState(moment(new Date("December 20, 2021")));
   const [menuOpen, setMenuOpen] = useState(null);
   const [category, setCategory] = useState("location");
   const [sortDirection, setSortDirection] = useState(1);
@@ -107,9 +107,9 @@ export default function Games() {
   };
   const [fetchedGames] = useFetchData(
     null,
-    "61d7b285969da7670fc7e962",
+    admin.org._id,
     "orgGamesOnDate",
-    { date }
+    date.toISOString()
   );
   const games = fetchedGames || mockGames;
 

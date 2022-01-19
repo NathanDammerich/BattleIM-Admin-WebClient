@@ -2,12 +2,12 @@ import axios from "axios";
 
 const API = axios.create({
   baseURL: "https://battleim-backend.herokuapp.com/",
-  // baseURL: "https://localhost:5000",
+  //baseURL: "http://localhost:5000",
 });
 
 export const getGames = () => API.get("/games");
-export const getGamesForOrgOnDate = (id, dateISO) =>
-  API.post(`/orgs/${id}/date`, dateISO);
+export const getGamesForOrgOnDate = (id, isoDate) =>
+  API.post(`/orgs/${id}/date`, { isoDate: isoDate });
 export const getGame = (id) => API.get(`/games/${id}`);
 export const updateGame = (id, updatedGame) =>
   API.patch(`/games/${id}`, updatedGame);
