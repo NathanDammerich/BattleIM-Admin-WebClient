@@ -47,7 +47,7 @@ export default function Modal() {
     dispatch(removeModal());
   };
 
-  const topModal = modal.at(-1);
+  const topModal = modal[modal.length - 1];
   const ModalComponent = modalTypeToComponent[topModal?.type];
   const modalParams = modalTypeToParams[topModal?.type];
 

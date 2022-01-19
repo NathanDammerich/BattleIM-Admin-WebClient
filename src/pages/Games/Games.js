@@ -19,72 +19,6 @@ import moment from "moment";
 import SimpleDatePicker from "../../components/SimpleDatePicker/SimpleDatePicker";
 import GamesList from "../../components/Teams/TeamCard/GamesList/GamesList";
 
-const mockGames = [
-  {
-    _id: "test123",
-    location: "ABC",
-    league: "Basketball",
-    homeTeam: "home",
-    awayTeam: "away",
-    time: new Date("1/1/2020 1:00 pm").toString(),
-  },
-  {
-    _id: "test123",
-    location: "ABC",
-    league: "Basketball",
-    homeTeam: "home",
-    awayTeam: "away1",
-    time: new Date("1/1/2020 2:00 pm").toString(),
-  },
-  {
-    _id: "test123",
-    location: "XYZ",
-    league: "Basketball",
-    homeTeam: "home",
-    awayTeam: "away2",
-    time: new Date("1/1/2020 3:00 pm").toString(),
-  },
-  {
-    _id: "test123",
-    location: "XYZ",
-    league: "Basketball",
-    homeTeam: "home",
-    awayTeam: "away3",
-    time: new Date("1/1/2020 4:00 pm").toString(),
-  },
-  {
-    _id: "test123",
-    location: "ABC",
-    league: "Softball",
-    homeTeam: "home",
-    awayTeam: "away",
-    time: new Date("1/1/2020 5:00 pm").toString(),
-  },
-  {
-    _id: "test123",
-    location: "ABC",
-    league: "Softball",
-    homeTeam: "home",
-    awayTeam: "away1",
-    time: new Date("1/1/2020 6:00 pm").toString(),
-  },
-  {
-    _id: "test123",
-    location: "XYZ",
-    league: "Softball",
-    homeTeam: "home",
-    awayTeam: "away2",
-    time: new Date("1/1/2020 7:00 pm").toString(),
-  },
-  {
-    _id: "test123",
-    location: "XYZ",
-    league: "Softball",
-    homeTeam: "home",
-    awayTeam: "away3",
-    time: new Date("1/1/2020 8:00 pm").toString(),
-  },
-];
 
 const categorize = (category, data) => {
   let categorization = {};
@@ -105,13 +39,12 @@ export default function Games() {
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
   };
-  const [fetchedGames] = useFetchData(
+  const [games] = useFetchData(
     null,
-    admin.org._id,
+    admin.org?._id,
     "orgGamesOnDate",
     date.toISOString()
   );
-  const games = fetchedGames || mockGames;
 
   const categorization = React.useMemo(
     () => categorize(category, games ?? []),
@@ -183,7 +116,7 @@ export default function Games() {
               <Paper>
                 <Box padding="5px">
                   <Typography>{label}</Typography>
-                  <GamesList games={games} teamID="na" />
+                  <GamesList games={games} />
                 </Box>
               </Paper>
             </Grid>
