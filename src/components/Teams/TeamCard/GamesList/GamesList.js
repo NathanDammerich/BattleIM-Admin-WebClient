@@ -63,7 +63,7 @@ export default function GamesList({ games, teamID }) {
               </Grid>
               <Grid item xs={4}>
                 <Typography variant="body2">
-                  {moment(game.time).format("h:mm A")} {game.day}
+                  {moment(game.date).format("h:mm A")}
                 </Typography>
               </Grid>
               {teamID && game.results ? (
