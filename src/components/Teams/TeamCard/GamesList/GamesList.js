@@ -1,5 +1,5 @@
 import { Grid, Typography } from "@material-ui/core";
-import React from "react";
+import moment from "moment";
 
 import { useDispatch } from "react-redux";
 
@@ -23,7 +23,7 @@ export default function GamesList({ games, teamID }) {
       game.opponent = game.awayTeam;
       game.opponentScore = game.results?.awayScore;
       game.userScore = game.results?.homeScore;
-    } else {
+    } else if (game.awayTeam._id === teamID) {
       game.opponent = game.homeTeam;
       game.opponentScore = game.results?.homeScore;
       game.userScore = game.results?.awayScore;
@@ -40,7 +40,7 @@ export default function GamesList({ games, teamID }) {
               item
               container
               className={
-                !game.results
+                !game.results || !teamID
                   ? classes.upcoming
                   : teamID === game.results.winner
                   ? classes.win
@@ -52,18 +52,21 @@ export default function GamesList({ games, teamID }) {
             >
               <Grid item xs={4}>
                 <Typography variant="body2">
-                  vs{" "}
                   <span className={classes.underline}>
-                    {game.opponent.name}
+                    {!game.opponent ? game.awayTeam.name : ""}
+                  </span>
+                  {" vs "}
+                  <span className={classes.underline}>
+                    {game.opponent?.name ?? game.homeTeam.name}
                   </span>
                 </Typography>
               </Grid>
               <Grid item xs={4}>
                 <Typography variant="body2">
-                  {game.time} {game.day}
+                  {moment(game.date).format("h:mm A")}
                 </Typography>
               </Grid>
-              {game.results ? (
+              {teamID && game.results ? (
                 <Grid item xs={4} align="right">
                   <Typography variant="body2">
                     {game.results.winner === teamID ? "W" : "L"} (
