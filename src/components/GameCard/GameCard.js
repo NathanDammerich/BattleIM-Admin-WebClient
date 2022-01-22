@@ -10,11 +10,12 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 
 import useStyles from "./styles";
-import { getGame } from "../../../api";
+import { getGame } from "../../api";
 import { useDispatch, useSelector } from "react-redux";
-import { addModal } from "../../../actions/modals";
+import { addModal } from "../../actions/modals";
 
 const TeamName = ({ game, team }) => {
+  console.log(team);
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -115,9 +116,9 @@ export default function GameCard({ gameFromParent, gameID }) {
     };
     dispatch(addModal(modal));
   };
-  const callEditScore = () => {
+  const callEditGame = () => {
     const modal = {
-      type: "EditScore",
+      type: "EditGame",
       id: game._id,
       game,
     };
@@ -149,7 +150,7 @@ export default function GameCard({ gameFromParent, gameID }) {
                     </Typography>
                   )}
                   {isAdmin && (
-                    <IconButton size="small" onClick={callEditScore}>
+                    <IconButton size="small" onClick={callEditGame}>
                       <EditIcon fontSize="small" />
                     </IconButton>
                   )}

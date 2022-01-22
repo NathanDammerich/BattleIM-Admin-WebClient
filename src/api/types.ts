@@ -17,7 +17,7 @@ export interface ISport {
     awayTeam: ITeam;
     results: IResult;
     note: string;
-    leagueId: string;
+    leagueID: string;
     day: string;
     time: string;
   }
