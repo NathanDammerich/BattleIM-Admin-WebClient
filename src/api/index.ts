@@ -22,9 +22,6 @@ export const getGame = (id: string) => API.get(`/games/${id}`);
 export const updateGame = (id: string, updatedGame: string) =>
   API.patch(`/games/${id}`, updatedGame);
 export const createGame = (newGame: IGame) => API.post("/games", newGame);
-// export const getUpcomingGames = (teamsArray: string[]) => {
-//   return API.post("/games/upcoming", { teamsArray: teamsArray });
-// };
 export const updateResults = (id: string, result: IResult) =>
   API.post(`/games/${id}/results`, result);
 
@@ -32,8 +29,6 @@ export const getTeam = (id: string) => API.get(`/teams/${id}`);
 export const updateTeam = (id: string, updatedTeam: ITeam) =>
   API.patch(`/teams/${id}`, updatedTeam);
 export const createTeam = (newTeam: ITeam) => API.post("/teams", newTeam);
-// export const getTeamsArray = (teamsArray: any) =>
-//   API.post("/teams/array", { teamsArray: teamsArray });
 export const removePlayer = (teamID: string, playerID: string) =>
   API.patch(`/teams/${teamID}/removePlayer`, { playerID: playerID });
 
