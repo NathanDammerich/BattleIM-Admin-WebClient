@@ -1,5 +1,4 @@
 export const addModal = (modal) => (dispatch) => {
-  console.log("addmodal called");
   dispatch({ type: "ADD_MODAL", payload: modal });
 };
 

@@ -1,4 +1,4 @@
-import * as api from "../api/index.js";
+import * as api from "../api/index";
 import { replaceModal } from "./modals.js";
 
 export const getTeam = (id) => async (dispatch) => {
