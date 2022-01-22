@@ -4,50 +4,83 @@ import {
   TextField,
   Button,
   CircularProgress,
+  Box,
 } from "@material-ui/core";
 import { useState } from "react";
 import { updateResults } from "../../api";
 import { IGame } from "../../api/types";
+import useStyles from "./styles";
 
 export default function LeagueCard({ game }: { game: IGame }) {
+  const classes = useStyles();
   const { results, homeTeam, awayTeam, _id } = game;
   const [homeScore, setHomeScore] = useState(results.homeScore);
   const [awayScore, setAwayScore] = useState(results.awayScore);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<undefined | any>();
 
   const handleSubmit = async () => {
-    const newResults = { ...results, homeScore, awayScore };
+    let newResults = {} as any; // TODO change to IResults
     if (awayScore > homeScore) {
-      newResults.winner = awayTeam._id;
-      newResults.loser = homeTeam._id;
+      newResults = {
+        winningScore: awayScore,
+        losingScore: homeScore,
+        winningTeam: awayTeam,
+        losingTeam: homeTeam,
+      };
     } else {
-      newResults.winner = homeTeam._id;
-      newResults.loser = awayTeam._id;
+      newResults = {
+        winningScore: homeScore,
+        losingScore: awayScore,
+        winningTeam: homeTeam,
+        losingTeam: awayTeam,
+      };
     }
     setLoading(true);
-    await updateResults(_id, newResults);
+    setError(undefined);
+    try {
+      await updateResults(_id, newResults);
+    } catch (e: any) {
+      setError(e.message);
+    }
     setLoading(false);
   };
 
   return (
     <>
-      <Card raised>
+      <Card raised className={classes.cardWrapper}>
         {loading ? (
           <CircularProgress />
         ) : (
-          <>
-            <Typography>{`Home: ${homeTeam.name}`}</Typography>
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="start"
+            padding="10px"
+          >
+            {error && <Typography color="error">{error}</Typography>}
+            <Typography
+              className={classes.teamName}
+            >{`Home: ${homeTeam.name}`}</Typography>
             <TextField
               defaultValue={results.homeScore}
               onChange={(e) => setHomeScore(parseInt(e.target.value, 10))}
             />
-            <Typography>{`Away: ${awayTeam.name}`}</Typography>
+            <Typography
+              className={classes.teamName}
+            >{`Away: ${awayTeam.name}`}</Typography>
             <TextField
               defaultValue={results.awayScore}
               onChange={(e) => setAwayScore(parseInt(e.target.value, 10))}
             />
-            <Button onClick={handleSubmit}>Submit</Button>
-          </>
+            <Button
+              color="primary"
+              onClick={handleSubmit}
+              className={classes.submitButton}
+            >
+              Submit
+            </Button>
+          </Box>
         )}
       </Card>
     </>
