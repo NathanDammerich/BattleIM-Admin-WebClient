@@ -68,7 +68,6 @@ const TableRow = ({ label, value, onClick }) => {
 };
 
 export default function GameCard({ gameFromParent, gameID }) {
-  const user = useSelector((state) => state.user);
   const admin = useSelector((state) => state.admin);
   const isAdmin = !!admin?.org?._id;
   const classes = useStyles();
@@ -80,16 +79,11 @@ export default function GameCard({ gameFromParent, gameID }) {
     if (gameFromParent) {
       setGame(gameFromParent);
     } else {
-      fetchGame(gameID).then((game) => {
+      getGame(gameID).then((game) => {
         setGame(game.data);
       });
     }
   }, [gameFromParent, gameID]);
-
-  const fetchGame = async (id) => {
-    const game = await getGame(id);
-    return game;
-  };
 
   const homeIsWinner = game?.results && game?.homeTeam?._id === game?.results?.winningTeam
   const getScore = () => {
@@ -145,20 +139,6 @@ export default function GameCard({ gameFromParent, gameID }) {
               <TeamName team={game.awayTeam} game={game} />
             </Grid>
           </Grid>
-          {/* <Grid item xs={12} container>
-            <Grid item xs={6}>
-              <Typography
-                color="primary"
-                variant="body1"
-                align="left"
-              >{`${game.time} ${game.date}`}</Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography color="primary" variant="body1" align="right">
-                {game.location}
-              </Typography>
-            </Grid>
-          </Grid> */}
 
           <Grid item xs={12} container className={classes.marginBottom}>
             <TableRow label="Date" value={game.day} />
