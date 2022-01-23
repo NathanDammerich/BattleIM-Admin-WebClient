@@ -1,7 +1,7 @@
 import axios from "axios";
 import {
   IGame,
-  IResult,
+  IResultPost,
   ITeam,
   IUser,
   ILeague,
@@ -22,8 +22,8 @@ export const getGame = (id: string) => API.get(`/games/${id}`);
 export const updateGame = (id: string, updatedGame: string) =>
   API.patch(`/games/${id}`, updatedGame);
 export const createGame = (newGame: IGame) => API.post("/games", newGame);
-export const updateResults = (id: string, result: IResult) =>
-  API.post(`/games/${id}/results`, result);
+export const updateResults = (id: string, results: IResultPost) =>
+  API.post(`/games/${id}/results`, {results});
 
 export const getTeam = (id: string) => API.get(`/teams/${id}`);
 export const updateTeam = (id: string, updatedTeam: ITeam) =>

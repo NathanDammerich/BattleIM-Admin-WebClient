@@ -30,14 +30,14 @@ const TeamName = ({ game, team }) => {
       variant="h4"
       className={
         game.results
-          ? game.results.winner === team.team._id
+          ? game.results.winningTeam === team._id
             ? classes.win
             : classes.loss
           : classes.upcoming
       }
-      onClick={() => openTeam(team.team._id)}
+      onClick={() => openTeam(team._id)}
     >
-      {team.team.name}
+      {team.name}
     </Typography>
   );
 };
@@ -73,8 +73,6 @@ export default function GameCard({ gameFromParent, gameID }) {
   const isAdmin = !!admin?.org?._id;
   const classes = useStyles();
   const [game, setGame] = useState(null);
-  const [leftTeam, setLeftTeam] = useState(null);
-  const [rightTeam, setRightTeam] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -88,24 +86,20 @@ export default function GameCard({ gameFromParent, gameID }) {
     }
   }, [gameFromParent, gameID]);
 
-  useEffect(() => {
-    if (game) {
-      if (user?.teams?.includes(game.homeTeam._id)) {
-        setLeftTeam({ team: game.homeTeam, score: game.results?.homeScore });
-        setRightTeam({ team: game.awayTeam, score: game.results?.awayScore });
-      } else if (user?.teams?.includes(game.awayTeam._id)) {
-        setLeftTeam({ team: game.awayTeam, score: game.results?.awayScore });
-        setRightTeam({ team: game.homeTeam, score: game.results?.homeScore });
-      } else {
-        setLeftTeam({ team: game.homeTeam, score: game.results?.homeScore });
-        setRightTeam({ team: game.awayTeam, score: game.results?.awayScore });
-      }
-    }
-  }, [game, user.teams]);
-
   const fetchGame = async (id) => {
     const game = await getGame(id);
     return game;
+  };
+
+  const homeIsWinner = game?.results && game?.homeTeam?._id === game?.results?.winningTeam
+  const getScore = () => {
+    if (!game?.results) {
+      return 'vs';
+    }
+    if (homeIsWinner) {
+      return `${game?.results.winningScore} - ${game?.results.losingScore}`
+    }
+    return `${game?.results.losingScore} - ${game?.results.winningScore}`
   };
 
   const callOpenLeague = () => {
@@ -129,37 +123,29 @@ export default function GameCard({ gameFromParent, gameID }) {
   }
   return (
     <>
-      {leftTeam && rightTeam && (
-        <Card className={classes.card} raised>
-          <Grid container>
-            <Grid item xs={12} container className={classes.marginTop}>
-              <Grid item xs={12} sm={5}>
-                <TeamName team={leftTeam} game={game} />
-              </Grid>
-              <Grid item xs={12} sm={2}>
-                <Box display="flex" alignItems="center">
-                  {game.results ? (
-                    <Typography
-                      color="primary"
-                      variant="h4"
-                    >{`${leftTeam.score} - ${rightTeam.score}`}</Typography>
-                  ) : (
-                    <Typography color="secondary" variant="h4">
-                      vs
-                    </Typography>
-                  )}
-                  {isAdmin && (
-                    <IconButton size="small" onClick={callEditScore}>
-                      <EditIcon fontSize="small" />
-                    </IconButton>
-                  )}
-                </Box>
-              </Grid>
-              <Grid item xs={12} sm={5} className={classes.centerThenLeft}>
-                <TeamName team={rightTeam} game={game} />
-              </Grid>
+      <Card className={classes.card} raised>
+        <Grid container>
+          <Grid item xs={12} container className={classes.marginTop}>
+            <Grid item xs={12} sm={5}>
+              <TeamName team={game.homeTeam} game={game} />
             </Grid>
-            {/* <Grid item xs={12} container>
+            <Grid item xs={12} sm={2}>
+              <Box display="flex" alignItems="center">
+                <Typography color="primary" variant="h4">
+                  {getScore()}
+                </Typography>
+                {isAdmin && (
+                  <IconButton size="small" onClick={callEditScore}>
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                )}
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={5} className={classes.centerThenLeft}>
+              <TeamName team={game.awayTeam} game={game} />
+            </Grid>
+          </Grid>
+          {/* <Grid item xs={12} container>
             <Grid item xs={6}>
               <Typography
                 color="primary"
@@ -174,19 +160,18 @@ export default function GameCard({ gameFromParent, gameID }) {
             </Grid>
           </Grid> */}
 
-            <Grid item xs={12} container className={classes.marginBottom}>
-              <TableRow label="Date" value={game.day} />
-              <TableRow label="Time" value={game.time} />
-              <TableRow label="Location" value={game.location} />
-              <TableRow
-                label="League"
-                value={game.league}
-                onClick={callOpenLeague}
-              />
-            </Grid>
+          <Grid item xs={12} container className={classes.marginBottom}>
+            <TableRow label="Date" value={game.day} />
+            <TableRow label="Time" value={game.time} />
+            <TableRow label="Location" value={game.location} />
+            <TableRow
+              label="League"
+              value={game.league}
+              onClick={callOpenLeague}
+            />
           </Grid>
-        </Card>
-      )}
+        </Grid>
+      </Card>
     </>
   );
 }
