@@ -12,15 +12,17 @@ import { removeModal } from "../../actions/modals";
 import MakeTeam from "../Leagues/MakeTeam/MakeTeam";
 import User from "../User/User";
 import LeagueCard from "../LeagueCard/LeagueCard";
+import EditScore from "../ScoreEditModal/ScoreEdit";
 
 const modalTypeToComponent = {
   Game: GameCard,
   Team: TeamCard,
-  League: League,
-  Quiz: Quiz,
-  MakeTeam: MakeTeam,
-  User: User,
-  LeagueCard: LeagueCard,
+  League,
+  Quiz,
+  MakeTeam,
+  User,
+  LeagueCard,
+  EditScore,
 };
 
 const modalTypeToParams = {
@@ -35,25 +37,26 @@ const modalTypeToParams = {
   MakeTeam: (modal) => ({ divisionID: modal.id }),
   User: () => ({}),
   LeagueCard: (modal) => ({ leagueID: modal.id }),
+  EditScore: (modal) => modal,
 };
 
 export default function Modal() {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const modal = useSelector((state) => state.modals);
+  const modals = useSelector((state) => state.modals);
 
   const closeModal = () => {
     dispatch(removeModal());
   };
 
-  const topModal = modal[modal.length - 1];
+  const topModal = modals[modals.length - 1];
   const ModalComponent = modalTypeToComponent[topModal?.type];
   const modalParams = modalTypeToParams[topModal?.type]?.(topModal);
 
   return ReactDom.createPortal(
     <>
-      {modal.length > 0 && (
+      {modals.length > 0 && (
         <Grid className={classes.overlay} onClick={closeModal} container>
           <Grid
             item
@@ -63,7 +66,7 @@ export default function Modal() {
             align="center"
           >
             {ModalComponent && modalParams ? (
-              <ModalComponent {...modalParams} />
+              <ModalComponent {...modalParams} onClose={closeModal} />
             ) : (
               <h1>unrecognized modal type</h1>
             )}

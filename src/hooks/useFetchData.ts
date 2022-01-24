@@ -5,8 +5,6 @@ import {
   getTeam,
   getQuiz,
   getDivision,
-  getUpcomingGames,
-  getTeamsArray,
   getGamesForOrgOnDate,
   getAdmin,
 } from "../api";
@@ -19,8 +17,6 @@ enum APITypes {
   "team" = "team",
   "quiz" = "quiz",
   "division" = "division",
-  "teams" = "teams",
-  "upcomingGames" = "upcomingGames",
 }
 
 const APITypesToFnMap: Record<
@@ -34,8 +30,6 @@ const APITypesToFnMap: Record<
   [APITypes.team]: getTeam,
   [APITypes.quiz]: getQuiz,
   [APITypes.division]: getDivision,
-  [APITypes.teams]: getTeamsArray,
-  [APITypes.upcomingGames]: getUpcomingGames,
 };
 
 const getKey = (dataId: string, identifier: APITypes) =>
