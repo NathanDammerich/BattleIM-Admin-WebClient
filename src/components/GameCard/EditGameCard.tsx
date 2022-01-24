@@ -13,7 +13,7 @@ const TeamName = ({ game, team }: { game: IGame; team: ITeam }) => {
       variant="h4"
       className={
         game.results
-          ? game.results.winner === team._id
+          ? game.results.winningTeam === team._id
             ? classes.win
             : classes.loss
           : classes.upcoming

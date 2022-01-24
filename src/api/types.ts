@@ -22,15 +22,17 @@ export interface ISport {
     time: string;
   }
   
+  export interface IResultPost {
+    winningTeam: ITeam;
+    losingTeam: ITeam;
+    winningScore: number;
+    losingScore: number;
+  } 
   export interface IResult {
-    winner: string;
-    loser: string;
-    homeScore: number;
-    awayScore: number;
-    // winningTeam: ITeam;
-    // losingTeam: ITeam;
-    // winningScore: number;
-    // losingScore: number;
+    winningTeam: string;
+    losingTeam: string;
+    winningScore: number;
+    losingScore: number;
   }
   
   export interface ITeam {

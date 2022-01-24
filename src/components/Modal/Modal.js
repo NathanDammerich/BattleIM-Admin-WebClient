@@ -69,7 +69,7 @@ export default function Modal() {
             align="center"
           >
             {ModalComponent && modalParams ? (
-              <ModalComponent {...modalParams} />
+              <ModalComponent {...modalParams} onClose={closeModal} />
             ) : (
               <h1>unrecognized modal type</h1>
             )}

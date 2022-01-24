@@ -11,11 +11,22 @@ import { updateResults } from "../../api";
 import { IGame } from "../../api/types";
 import useStyles from "./styles";
 
-export default function LeagueCard({ game }: { game: IGame }) {
+export default function ScoreEditCard({
+  game,
+  onClose,
+}: {
+  game: IGame;
+  onClose: () => void;
+}) {
   const classes = useStyles();
   const { results, homeTeam, awayTeam, _id } = game;
-  const [homeScore, setHomeScore] = useState(results.homeScore);
-  const [awayScore, setAwayScore] = useState(results.awayScore);
+  const homeIsWinner = results && homeTeam._id === results.winningTeam;
+  const [homeScore, setHomeScore] = useState(
+    homeIsWinner ? results?.winningScore : results?.losingScore
+  );
+  const [awayScore, setAwayScore] = useState(
+    !homeIsWinner ? results?.winningScore : results?.losingScore
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<undefined | any>();
 
@@ -43,6 +54,7 @@ export default function LeagueCard({ game }: { game: IGame }) {
     } catch (e: any) {
       setError(e.message);
     }
+    onClose();
     setLoading(false);
   };
 
@@ -63,14 +75,18 @@ export default function LeagueCard({ game }: { game: IGame }) {
               className={classes.teamName}
             >{`Home: ${homeTeam.name}`}</Typography>
             <TextField
-              defaultValue={results.homeScore}
+              defaultValue={
+                homeIsWinner ? results.winningScore : results.losingScore
+              }
               onChange={(e) => setHomeScore(parseInt(e.target.value, 10))}
             />
             <Typography
               className={classes.teamName}
             >{`Away: ${awayTeam.name}`}</Typography>
             <TextField
-              defaultValue={results.awayScore}
+              defaultValue={
+                !homeIsWinner ? results.winningScore : results.losingScore
+              }
               onChange={(e) => setAwayScore(parseInt(e.target.value, 10))}
             />
             <Button
