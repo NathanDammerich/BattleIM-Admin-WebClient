@@ -15,7 +15,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { addModal } from "../../actions/modals";
 
 const TeamName = ({ game, team }) => {
-  console.log(team);
   const classes = useStyles();
   const dispatch = useDispatch();
 

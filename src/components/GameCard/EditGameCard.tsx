@@ -12,7 +12,7 @@ import {
 import useStyles from "./styles";
 import { getGame } from "../../api";
 import { updateResults } from "../../api";
-import { IGame, IResultPost, IResult, ITeam } from "../../api/types";
+import { IGame, IResultPost, ITeam } from "../../api/types";
 
 const TeamName = ({ game, team }: { game: IGame; team: ITeam }) => {
   const classes = useStyles();
