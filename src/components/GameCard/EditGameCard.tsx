@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Card, Typography, Box, TextField, Button } from "@material-ui/core";
+import {
+  Card,
+  Typography,
+  Box,
+  TextField,
+  Button,
+  CircularProgress,
+  TextFieldProps,
+} from "@material-ui/core";
 
 import useStyles from "./styles";
 import { getGame } from "../../api";
-import { useDispatch, useSelector } from "react-redux";
-import { IGame, IResult, ITeam } from "../../api/types";
+import { updateResults } from "../../api";
+import { IGame, IResultPost, IResult, ITeam } from "../../api/types";
 
 const TeamName = ({ game, team }: { game: IGame; team: ITeam }) => {
   const classes = useStyles();
@@ -29,12 +37,8 @@ const EditableValue = ({
   value,
   onChange,
   disabled,
-}: {
-  label: string;
-  value: string | number;
-  onChange?: React.ChangeEventHandler;
-  disabled?: boolean;
-}) => {
+  type,
+}: TextFieldProps) => {
   return (
     <TextField
       style={{ padding: "5px" }}
@@ -42,6 +46,7 @@ const EditableValue = ({
       value={value}
       onChange={onChange}
       disabled={disabled}
+      type={type}
     />
   );
 };
@@ -55,16 +60,70 @@ export default function GameCard({
 }) {
   const classes = useStyles();
   const [game, setGame] = useState<IGame>(initialGame);
+  const { results, homeTeam } = game;
+  const [loading, setLoading] = useState(false);
+  const [updatedResults, setUpdatedResults] = useState<IResultPost>(
+    {
+      winningScore: results.winningScore,
+      losingScore: results.losingScore,
+      winningTeam: game.homeTeam._id === results.winningTeam ? game.homeTeam : game.awayTeam,
+      losingTeam: game.homeTeam._id !== results.winningTeam ? game.homeTeam : game.awayTeam,
+    }
+  );
+  const [error, setError] = useState<string | undefined>();
+  const homeIsWinner =
+    updatedResults && homeTeam._id === updatedResults.winningTeam._id;
+  const homeScore = homeIsWinner
+    ? updatedResults.winningScore
+    : updatedResults.losingScore;
+  const awayScore = !homeIsWinner
+    ? updatedResults.winningScore
+    : updatedResults.losingScore;
 
   useEffect(() => {
-    fetchGame(id).then((game) => {
+    getGame(id).then((game) => {
       setGame(game.data);
     });
   }, [initialGame, id]);
 
-  const fetchGame = async (id: string) => {
-    const game = await getGame(id);
-    return game;
+  const handleUpdateResults =
+    (team: "homeTeam" | "awayTeam") => async (value: number) => {
+      const otherTeam = team === "homeTeam" ? "awayTeam" : "homeTeam";
+      const otherScore = team === "homeTeam" ? awayScore : homeScore;
+      if (value > updatedResults.winningScore) {
+        setUpdatedResults({
+          winningScore: value,
+          winningTeam: game[team],
+          losingTeam: game[otherTeam],
+          losingScore: otherScore,
+        });
+      } else if (value < updatedResults.losingScore) {
+        setUpdatedResults({
+          winningScore: otherScore,
+          winningTeam: game[otherTeam],
+          losingTeam: game[team],
+          losingScore: value,
+        });
+      } else {
+        const updatingWinning = (team === 'homeTeam' && homeIsWinner) || (team === 'awayTeam' && !homeIsWinner);
+        setUpdatedResults({
+          winningScore: updatingWinning ? value : updatedResults.winningScore,
+          losingScore: !updatingWinning ? value : updatedResults.losingScore,
+          winningTeam: updatedResults.winningTeam,
+          losingTeam: updatedResults.losingTeam,
+        });
+      }
+    };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    setError(undefined);
+    try {
+      await updateResults(game._id, updatedResults as IResultPost);
+    } catch (e: any) {
+      setError(e.message);
+    }
+    setLoading(false);
   };
 
   if (!game) {
@@ -73,38 +132,58 @@ export default function GameCard({
   return (
     <>
       <Card className={classes.card} raised>
-        <Box minWidth="400px" display="flex" justifyContent="space-between" margin="20px">
+        <Box
+          minWidth="400px"
+          display="flex"
+          justifyContent="space-between"
+          margin="20px"
+        >
           <TeamName team={game.homeTeam} game={game} />
           <Typography variant="h4">vs</Typography>
           <TeamName team={game.awayTeam} game={game} />
         </Box>
-        <Box display="flex" flexDirection="column" margin="20px">
-          <EditableValue
-            label="Home Team"
-            value={game.homeTeam.name}
-            disabled
-          />
-          <EditableValue
-            label="Home Team Score"
-            value={game.results.homeScore}
-          />
-          <EditableValue
-            label="Away Team"
-            value={game.homeTeam.name}
-            disabled
-          />
-          <EditableValue
-            label="Away Team Score"
-            value={game.results.awayScore}
-          />
-        </Box>
-        <Box display="flex" flexDirection="column" margin="20px">
-          <EditableValue label="Date" value={game.day} disabled />
-          <EditableValue label="Time" value={game.time} disabled />
-          <EditableValue label="Location" value={game.location} disabled />
-          <EditableValue label="League" value={game.league} disabled />
-        </Box>
-        <Button>Submit</Button>
+        {error ? <Typography color="error">{error}</Typography> : null}
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <>
+            <Box display="flex" flexDirection="column" margin="20px">
+              <EditableValue
+                label="Home Team"
+                value={game.homeTeam.name}
+                disabled
+              />
+              <EditableValue
+                label="Home Team Score"
+                value={homeScore}
+                type="number"
+                onChange={(e) =>
+                  handleUpdateResults("homeTeam")(parseInt(e.target.value, 10))
+                }
+              />
+              <EditableValue
+                label="Away Team"
+                value={game.homeTeam.name}
+                disabled
+              />
+              <EditableValue
+                label="Away Team Score"
+                value={awayScore}
+                type="number"
+                onChange={(e) =>
+                  handleUpdateResults("awayTeam")(parseInt(e.target.value, 10))
+                }
+              />
+            </Box>
+            <Box display="flex" flexDirection="column" margin="20px">
+              <EditableValue label="Date" value={game.day} disabled />
+              <EditableValue label="Time" value={game.time} disabled />
+              <EditableValue label="Location" value={game.location} disabled />
+              <EditableValue label="League" value={game.league} disabled />
+            </Box>
+          </>
+        )}
+        <Button onClick={handleSubmit}>Submit</Button>
       </Card>
     </>
   );
