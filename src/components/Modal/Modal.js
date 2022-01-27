@@ -13,6 +13,7 @@ import MakeTeam from "../Leagues/MakeTeam/MakeTeam";
 import User from "../User/User";
 import LeagueCard from "../LeagueCard/LeagueCard";
 import EditScore from "../ScoreEditModal/ScoreEdit";
+import Attendance from "../Attendance/Attendance";
 
 const modalTypeToComponent = {
   Game: GameCard,
@@ -23,6 +24,7 @@ const modalTypeToComponent = {
   User,
   LeagueCard,
   EditScore,
+  Attendance,
 };
 
 const modalTypeToParams = {
@@ -38,6 +40,7 @@ const modalTypeToParams = {
   User: () => ({}),
   LeagueCard: (modal) => ({ leagueID: modal.id }),
   EditScore: (modal) => modal,
+  Attendance: (modal) => modal,
 };
 
 export default function Modal() {
