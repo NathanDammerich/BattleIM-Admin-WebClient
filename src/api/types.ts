@@ -66,6 +66,15 @@ export interface ISport {
     playoffEnd: string;
     teams: ITeam[];
   }
+
+  export interface IDivision {
+    games: IGame[];
+    league: string;
+    maxTeams: number;
+    status: string;
+    teams: ITeam[];
+    timeSlot: string;
+  }
   
   export interface IOrg {
     _id: string;
