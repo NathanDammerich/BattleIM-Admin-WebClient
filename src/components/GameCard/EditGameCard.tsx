@@ -11,7 +11,7 @@ import {
 
 import useStyles from "./styles";
 import { getGame } from "../../api";
-import { updateResults } from "../../api";
+import { updateGame } from "../../api";
 import { IGame, IResultPost, ITeam } from "../../api/types";
 
 const TeamName = ({ game, team }: { game: IGame; team: ITeam }) => {
@@ -62,14 +62,14 @@ export default function GameCard({
   const [game, setGame] = useState<IGame>(initialGame);
   const { results, homeTeam } = game;
   const [loading, setLoading] = useState(false);
-  const [updatedResults, setUpdatedResults] = useState<IResultPost>(
-    {
-      winningScore: results.winningScore,
-      losingScore: results.losingScore,
-      winningTeam: game.homeTeam._id === results.winningTeam ? game.homeTeam : game.awayTeam,
-      losingTeam: game.homeTeam._id !== results.winningTeam ? game.homeTeam : game.awayTeam,
-    }
-  );
+  const [updatedResults, setUpdatedResults] = useState<IResultPost>({
+    winningScore: results.winningScore,
+    losingScore: results.losingScore,
+    winningTeam:
+      game.homeTeam._id === results.winningTeam ? game.homeTeam : game.awayTeam,
+    losingTeam:
+      game.homeTeam._id !== results.winningTeam ? game.homeTeam : game.awayTeam,
+  });
   const [error, setError] = useState<string | undefined>();
   const homeIsWinner =
     updatedResults && homeTeam._id === updatedResults.winningTeam._id;
@@ -105,7 +105,9 @@ export default function GameCard({
           losingScore: value,
         });
       } else {
-        const updatingWinning = (team === 'homeTeam' && homeIsWinner) || (team === 'awayTeam' && !homeIsWinner);
+        const updatingWinning =
+          (team === "homeTeam" && homeIsWinner) ||
+          (team === "awayTeam" && !homeIsWinner);
         setUpdatedResults({
           winningScore: updatingWinning ? value : updatedResults.winningScore,
           losingScore: !updatingWinning ? value : updatedResults.losingScore,
@@ -119,12 +121,18 @@ export default function GameCard({
     setLoading(true);
     setError(undefined);
     try {
-      await updateResults(game._id, updatedResults as IResultPost);
+      await updateGame(game._id, { ...game, results: updatedResults });
     } catch (e: any) {
       setError(e.message);
     }
     setLoading(false);
   };
+
+  const handleUpdateGame =
+    (key: string) =>
+    (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+      setGame({ ...game, [key]: e.target.value });
+    };
 
   if (!game) {
     return null;
@@ -178,7 +186,11 @@ export default function GameCard({
             <Box display="flex" flexDirection="column" margin="20px">
               <EditableValue label="Date" value={game.day} disabled />
               <EditableValue label="Time" value={game.time} disabled />
-              <EditableValue label="Location" value={game.location} disabled />
+              <EditableValue
+                label="Location"
+                value={game.location}
+                onChange={handleUpdateGame("location")}
+              />
               <EditableValue label="League" value={game.league} disabled />
             </Box>
           </>
