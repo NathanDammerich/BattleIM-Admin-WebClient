@@ -56,6 +56,15 @@ export interface ISport {
   
   export interface ILeague {
     _id: string;
+    description: string;
+    sport: ISport;
+    registrationOpen: string;
+    registrationClose: string;
+    seasonStart: string;
+    seasonEnd: string;
+    playoffStart: string;
+    playoffEnd: string;
+    teams: ITeam[];
   }
   
   export interface IOrg {

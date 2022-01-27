@@ -1,10 +1,11 @@
 import { Card, Typography, Grid } from "@material-ui/core";
-import React from "react";
 import { useDispatch } from "react-redux";
 
 import { addModal } from "../../actions/modals";
 import useStyles from "./styles.js";
-import useFetchData from "../../hooks/useFetchData";
+import useFetchData, { APITypes } from "../../hooks/useFetchData";
+import { ILeague } from "../../api/types";
+import { Button } from "@material-ui/core";
 
 const months = [
   "January",
@@ -21,23 +22,37 @@ const months = [
   "December",
 ];
 
-export default function LeagueCard({ leagueFromParent, leagueID }) {
+export default function LeagueCard({
+  leagueFromParent,
+  leagueID,
+}: {
+  leagueFromParent: ILeague;
+  leagueID: string;
+}) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [league] = useFetchData(leagueFromParent, leagueID, "league");
+  const [league] = useFetchData(
+    leagueFromParent,
+    leagueID,
+    APITypes.league
+  ) as unknown as [value: ILeague];
 
-  const callOpenTeam = (teamID) => {
+  const callOpenTeam = (id: string) => {
     const modal = {
       type: "Team",
-      id: teamID,
+      id,
     };
     dispatch(addModal(modal));
   };
 
-  const getDateString = (date) => {
+  const getDateString = (date: string) => {
     const newDate = new Date(date);
     const monthString = months[newDate.getMonth()];
     return `${monthString} ${newDate.getDate()}`;
+  };
+
+  const onRulesClick = () => {
+    console.log("window click");
   };
 
   return (
@@ -51,16 +66,7 @@ export default function LeagueCard({ leagueFromParent, leagueID }) {
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <a
-                href={league.sport.rules}
-                target="_blank"
-                rel="noreferrer"
-                className={classes.link}
-              >
-                <Typography variant="body1" color="primary">
-                  Rules
-                </Typography>
-              </a>
+              <Button onClick={onRulesClick}>Rules</Button>
             </Grid>
             <Grid item xs={12}>
               <Typography
@@ -89,11 +95,10 @@ export default function LeagueCard({ leagueFromParent, leagueID }) {
                 league.playoffStart
               )} - ${getDateString(league.playoffEnd)}`}</Typography>
             </Grid>
-            <Grid item xs={12} align="center">
+            <Grid item xs={12}>
               <Typography
                 variant="h6"
                 color="secondary"
-                className={classes.divisionHeading}
               >
                 Standings
               </Typography>
