@@ -22,10 +22,10 @@ export default function ScoreEditCard({
   const { results, homeTeam, awayTeam, _id } = game;
   const homeIsWinner = results && homeTeam._id === results.winningTeam;
   const [homeScore, setHomeScore] = useState(
-    homeIsWinner ? results?.winningScore : results?.losingScore
+    homeIsWinner ? results?.winningScore || 0 : results?.losingScore || 0
   );
   const [awayScore, setAwayScore] = useState(
-    !homeIsWinner ? results?.winningScore : results?.losingScore
+    !homeIsWinner ? results?.winningScore || 0 : results?.losingScore || 0
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<undefined | any>();
@@ -76,7 +76,7 @@ export default function ScoreEditCard({
             >{`Home: ${homeTeam.name}`}</Typography>
             <TextField
               defaultValue={
-                homeIsWinner ? results.winningScore : results.losingScore
+                homeIsWinner ? results?.winningScore : results?.losingScore
               }
               onChange={(e) => setHomeScore(parseInt(e.target.value, 10))}
             />
@@ -85,7 +85,7 @@ export default function ScoreEditCard({
             >{`Away: ${awayTeam.name}`}</Typography>
             <TextField
               defaultValue={
-                !homeIsWinner ? results.winningScore : results.losingScore
+                !homeIsWinner ? results?.winningScore : results?.losingScore
               }
               onChange={(e) => setAwayScore(parseInt(e.target.value, 10))}
             />
