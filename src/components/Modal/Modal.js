@@ -11,7 +11,6 @@ import Quiz from "../Quiz/Quiz";
 import { removeModal } from "../../actions/modals";
 import MakeTeam from "../Leagues/MakeTeam/MakeTeam";
 import User from "../User/User";
-import LeagueCard from "../LeagueCard/LeagueCard";
 import EditScore from "../ScoreEditModal/ScoreEdit";
 
 const modalTypeToComponent = {
@@ -21,7 +20,6 @@ const modalTypeToComponent = {
   Quiz,
   MakeTeam,
   User,
-  LeagueCard,
   EditScore,
 };
 
@@ -36,7 +34,6 @@ const modalTypeToParams = {
   Quiz: (modal) => ({ quizID: modal.id }),
   MakeTeam: (modal) => ({ divisionID: modal.id }),
   User: () => ({}),
-  LeagueCard: (modal) => ({ leagueID: modal.id }),
   EditScore: (modal) => modal,
 };
 

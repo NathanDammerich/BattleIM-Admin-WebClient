@@ -19,7 +19,9 @@ const Home = () => {
       <Grid item container xs={12} className={classes.paddingTop}>
         <Grid item xs={1} s={2}></Grid>
         <Grid item xs={10} s={8}>
-          {page === 1 ? <Games /> : page === 2 ? <Teams /> : <Leagues />}
+          {page === 1 ? <Games /> : null}
+          {page === 2 ? <Leagues/> : null}
+          {page === 3 ? <Teams/> : null}
         </Grid>
         <Grid item xs={1} s={2}></Grid>
       </Grid>

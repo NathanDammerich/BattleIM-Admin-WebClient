@@ -9,7 +9,7 @@ import {
   getAdmin,
 } from "../api";
 
-enum APITypes {
+export enum APITypes {
   "league" = "league",
   "admin" = "admin",
   "orgGamesOnDate" = "orgGamesOnDate",
