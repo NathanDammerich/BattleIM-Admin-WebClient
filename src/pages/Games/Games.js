@@ -19,7 +19,6 @@ import moment from "moment";
 import SimpleDatePicker from "../../components/SimpleDatePicker/SimpleDatePicker";
 import GamesList from "../../components/Teams/TeamCard/GamesList/GamesList";
 
-
 const categorize = (category, data) => {
   let categorization = {};
   data.forEach((v) => {
@@ -112,7 +111,7 @@ export default function Games() {
       <Grid container spacing={1}>
         {filteredSortedCategories.map(([label, games]) => {
           return (
-            <Grid item xs={12} md={6} lg={4}>
+            <Grid item xs={12} md={6} lg={4} key={label}>
               <Paper>
                 <Box padding="5px">
                   <Typography>{label}</Typography>
