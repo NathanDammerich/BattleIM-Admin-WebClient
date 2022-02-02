@@ -69,22 +69,19 @@ const buildSchedule = (
   const gameSlots = Math.floor(totalTime / gameSlotMinutes);
   const totalGamesToCreate = numberOfDays * gameSlots;
 
-  const teamIdMap = teams.map((t) => t._id);
+  const teamIdMap = Object.keys(teamMap);
   const roundRobin = Object.fromEntries(
     teamIdMap.map((team, location) => [
       team,
       teamIdMap.slice(location + 1, teamIdMap.length),
     ])
   );
-  console.log("debug", roundRobin);
 
   const matchUps = Object.entries(roundRobin)
     .map(([homeId, awayIds]) => awayIds.map((awayId) => [homeId, awayId]))
     .flat()
     .sort(() => (Math.random() > 0.5 ? -1 : 1))
     .slice(0, totalGamesToCreate);
-
-  console.log("matchUps", matchUps, totalGamesToCreate);
 
   const firstGameDate = getNextWeekdayAfterDate(startDate, day);
   const mappedGames: IGame[] = matchUps.map(([homeId, awayId], index) => {
