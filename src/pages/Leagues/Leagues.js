@@ -1,7 +1,7 @@
 import { CircularProgress, Grid } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 
-import SportCard from "./SportCard/SportCard";
+import SportCard from "../../components/Leagues/SportCard/SportCard";
 import { getOrg } from "../../api";
 
 export default function Leagues() {

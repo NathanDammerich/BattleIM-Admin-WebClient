@@ -9,7 +9,7 @@ import Adapter from '@mui/lab/AdapterMoment';
 import { getAdmin } from "./actions/admin";
 import Modal from "./components/Modal/Modal";
 import Auth from "./components/Auth/Auth";
-import Home from "./components/Home/Home";
+import Home from "./pages/Home/Home";
 
 const App = () => {
   const theme = createTheme({

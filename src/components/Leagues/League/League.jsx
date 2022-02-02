@@ -1,10 +1,6 @@
-import React from "react";
-
-import { useDispatch, useSelector } from "react-redux";
-
 import useFetchData, { APITypes } from "../../../hooks/useFetchData";
+import buildSchedule from "../../../utilities/buildSchedule";
 import { Button, Card, Typography, Grid } from "@material-ui/core";
-import { addModal } from "../../../actions/modals.js";
 import useStyles from "./styles.js";
 
 const months = [
@@ -25,36 +21,22 @@ const months = [
 export default function League({ leagueFromParent, leagueID }) {
   const [league] = useFetchData(leagueFromParent, leagueID, APITypes.league);
 
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
-
-  const attemptMakeTeam = (divisionID) => {
-    if (!league.sport.quiz) {
-      return makeTeam(divisionID);
-    }
-    if (user.quizzesPassed.includes(league.sport.quiz)) {
-      console.log("Quiz already passed");
-      return makeTeam(divisionID);
-    } else {
-      console.log("Quiz not passed");
-      return goToQuiz(league.sport.quiz);
-    }
-  };
-
-  const goToQuiz = (quizID) => {
-    const modal = {
-      type: "Quiz",
-      id: quizID,
-    };
-    dispatch(addModal(modal));
-  };
-
-  const makeTeam = (divisionID) => {
-    const modal = {
-      type: "MakeTeam",
-      id: divisionID,
-    };
-    dispatch(addModal(modal));
+  const handleMakeGames = (divisionID) => {
+    const { divisions } = league;
+    const division = divisions.find((d) => d._id === divisionID);
+    console.log(
+      buildSchedule(
+        league.seasonStart,
+        league.seasonEnd,
+        "1/1/2020 12:00",
+        "1/1/2020 14:00",
+        "Monday",
+        20,
+        division?.teams.map((t, k) => ({...t, _id: `${t._id}${k}`})),
+        league,
+        "Anywhere"
+      )
+    );
   };
 
   const getDateString = (date) => {
@@ -135,19 +117,13 @@ export default function League({ leagueFromParent, leagueID }) {
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
-                  {division.teams.length === division.maxTeams ? (
-                    <Typography variant="body1" color="secondary">
-                      FULL
-                    </Typography>
-                  ) : (
-                    <Button
-                      variant="text"
-                      size="small"
-                      onClick={() => attemptMakeTeam(division._id)}
-                    >
-                      Create Team
-                    </Button>
-                  )}
+                  <Button
+                    variant="text"
+                    size="small"
+                    onClick={() => handleMakeGames(division._id)}
+                  >
+                    Create Games
+                  </Button>
                 </Grid>
               </Grid>
             ))}

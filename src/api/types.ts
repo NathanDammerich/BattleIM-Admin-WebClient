@@ -16,10 +16,10 @@ export interface ISport {
     homeTeam: ITeam;
     awayTeam: ITeam;
     results?: IResult;
-    note: string;
+    note?: string;
     leagueId: string;
-    day: string;
-    time: string;
+    day?: string;
+    time?: string;
   }
   
   export interface IResultPost {
