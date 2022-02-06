@@ -1,4 +1,4 @@
-import { CircularProgress, TextField } from "@material-ui/core";
+import { CircularProgress, TextField, Button, Box } from "@material-ui/core";
 import moment from "moment";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -10,6 +10,7 @@ import { ILeague, ISport } from "../../api/types";
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-material.css";
+import useStyles from "./styles";
 
 const getSeasonStatus = (league: ILeague) => {
   return moment().isBetween(league.seasonStart, league.seasonEnd)
@@ -33,11 +34,7 @@ export default function Leagues() {
     getOrg("617f480dfec82da4aec5705c").then((org) => {
       const sports = org.data.sports as ISport[];
       setSports(Object.fromEntries(sports.map((s) => [s._id, s])));
-      setLeagues(
-        sports
-          .map((s) => s.leagues as unknown as ILeague[])
-          .flat()
-      );
+      setLeagues(sports.map((s) => s.leagues as unknown as ILeague[]).flat());
       setLoading(false);
     });
   }, []);
@@ -48,6 +45,16 @@ export default function Leagues() {
       id,
     };
     dispatch(addModal(modal));
+  };
+
+  const makeLeague = () => {
+    dispatch(
+      addModal({
+        type: "MakeLeague",
+        id: undefined,
+        league: {},
+      })
+    );
   };
 
   const columns: AgGridColumnProps[] = [
@@ -83,20 +90,21 @@ export default function Leagues() {
       },
     },
   ];
+  const classes = useStyles();
 
   return (
     <>
       {loading ? <CircularProgress /> : null}
-      <TextField
-        label="Filter"
-        onChange={(e) => setQuickFilter(e.target.value)}
-        variant="outlined"
-        style={{ margin: "5px" }}
-      />
-      <div
-        className="ag-theme-material"
-        style={{ height: "80vh", width: "100%" }}
-      >
+      <Box display="flex" justifyContent="space-between">
+        <TextField
+          label="Filter"
+          onChange={(e) => setQuickFilter(e.target.value)}
+          variant="outlined"
+          className={classes.filterInput}
+        />
+        <Button onClick={makeLeague}>Make League</Button>
+      </Box>
+      <div className={`ag-theme-material ${classes.tableWrapper}`}>
         <AgGridReact
           rowData={leagues}
           onRowClicked={({ data }) => openLeague(data._id)}

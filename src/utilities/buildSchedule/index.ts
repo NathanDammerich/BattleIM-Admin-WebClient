@@ -1,15 +1,5 @@
 import moment from "moment";
-import { IDivision, IGame, ILeague, ITeam } from "../../api/types";
-
-export enum DOW {
-  "Sunday" = "Sunday",
-  "Monday" = "Monday",
-  "Tuesday" = "Tuesday",
-  "Wednesday" = "Wednesday",
-  "Thursday" = "Thursday",
-  "Friday" = "Friday",
-  "Saturday" = "Saturday",
-}
+import { DOW, IGame, ILeague, ITeam } from "../../api/types";
 
 enum DOWVal {
   "Sunday",

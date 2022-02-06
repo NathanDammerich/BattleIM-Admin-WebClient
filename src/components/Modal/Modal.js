@@ -7,6 +7,7 @@ import useStyles from "./styles";
 import GameCard from "../Upcoming/GameCard/GameCard";
 import TeamCard from "../Teams/TeamCard/TeamCard";
 import League from "../Leagues/League/League";
+import MakeLeague from "../Leagues/MakeLeague/MakeLeague";
 import Quiz from "../Quiz/Quiz";
 import { removeModal } from "../../actions/modals";
 import MakeTeam from "../Leagues/MakeTeam/MakeTeam";
@@ -17,6 +18,7 @@ const modalTypeToComponent = {
   Game: GameCard,
   Team: TeamCard,
   League,
+  MakeLeague,
   Quiz,
   MakeTeam,
   User,
@@ -31,6 +33,7 @@ const modalTypeToParams = {
     startExpanded: true,
   }),
   League: (modal) => ({ leagueID: modal.id }),
+  MakeLeague: (modal) => modal,
   Quiz: (modal) => ({ quizID: modal.id }),
   MakeTeam: (modal) => ({ divisionID: modal.id }),
   User: () => ({}),
