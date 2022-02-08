@@ -20,6 +20,8 @@ export interface ISport {
     leagueID: string;
     day: string;
     time: string;
+    homeAttendance: string[];
+    awayAttendance: string[];
   }
   export interface IGamePost extends Omit<IGame, 'results'> {
     results: IResultPost;
@@ -48,9 +50,19 @@ export interface ISport {
     division: string;
     sport: ISport;
     games: IGame[] | string[];
-    players: unknown[];
+    players: IPlayer[];
     invites: string[];
     captain: string;
+  }
+
+  export interface IPlayer {
+    email: string;
+    male: boolean;
+    name: string;
+    orgs: string[] | IOrg[];
+    quizPassed: string[] | IQuiz[];
+    teams: string[] | ITeam[];
+    _id: string;
   }
   
   export interface IUser {
