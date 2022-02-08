@@ -1,7 +1,9 @@
+import { Button, Card, Typography, Grid } from "@material-ui/core";
+import { useDispatch } from "react-redux";
 import useFetchData, { APITypes } from "../../../hooks/useFetchData";
 import buildSchedule from "../../../utilities/buildSchedule";
-import { Button, Card, Typography, Grid } from "@material-ui/core";
 import useStyles from "./styles.js";
+import {addModal} from '../../../actions/modals';
 
 const months = [
   "January",
@@ -20,6 +22,7 @@ const months = [
 
 export default function League({ leagueFromParent, leagueID }) {
   const [league] = useFetchData(leagueFromParent, leagueID, APITypes.league);
+  const dispatch = useDispatch();
 
   const handleMakeGames = (divisionID) => {
     const { divisions } = league;
@@ -48,6 +51,17 @@ export default function League({ leagueFromParent, leagueID }) {
   const handleRuleClick = () => {
     window.open(league.sport?.rules, "_blank");
   };
+
+  const makeLeague = () => {
+    dispatch(
+      addModal({
+        type: "MakeLeague",
+        id: undefined,
+        league,
+      })
+    );
+
+  }
 
   const classes = useStyles();
 
@@ -127,6 +141,7 @@ export default function League({ leagueFromParent, leagueID }) {
                 </Grid>
               </Grid>
             ))}
+            <Button onClick={makeLeague}>Edit</Button>
           </Grid>
         </Card>
       )}
