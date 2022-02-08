@@ -4,7 +4,7 @@ import { Grid } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 
 import useStyles from "./styles";
-import GameCard from "../Upcoming/GameCard/GameCard";
+import GameCard from "../GameCard/GameCard";
 import TeamCard from "../Teams/TeamCard/TeamCard";
 import League from "../Leagues/League/League";
 import Quiz from "../Quiz/Quiz";
@@ -12,9 +12,11 @@ import { removeModal } from "../../actions/modals";
 import MakeTeam from "../Leagues/MakeTeam/MakeTeam";
 import User from "../User/User";
 import EditScore from "../ScoreEditModal/ScoreEdit";
+import EditGame from "../GameCard/EditGameCard";
 
 const modalTypeToComponent = {
   Game: GameCard,
+  EditGame,
   Team: TeamCard,
   League,
   Quiz,
@@ -25,6 +27,7 @@ const modalTypeToComponent = {
 
 const modalTypeToParams = {
   Game: (modal) => ({ gameID: modal.id }),
+  EditGame: (modal) => modal,
   Team: (modal) => ({
     teamFromParent: null,
     teamID: modal.id,

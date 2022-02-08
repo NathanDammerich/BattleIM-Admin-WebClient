@@ -21,6 +21,9 @@ export interface ISport {
     day?: string;
     time?: string;
   }
+  export interface IGamePost extends Omit<IGame, 'results'> {
+    results: IResultPost;
+  }
   
   export interface IResultPost {
     winningTeam: ITeam;

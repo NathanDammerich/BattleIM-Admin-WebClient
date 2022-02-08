@@ -3,7 +3,7 @@ import { Grid } from "@material-ui/core";
 import { useSelector } from "react-redux";
 
 import useFetchData from "../../hooks/useFetchData";
-import GameCard from "./GameCard/GameCard";
+import GameCard from "../GameCard/GameCard";
 
 const Upcoming = () => {
   const user = useSelector((state) => state.user);
