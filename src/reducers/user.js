@@ -1,4 +1,4 @@
-const userReducer = (user = [], action) => {
+const userReducer = (user = {}, action) => {
   switch (action.type) {
     case "FETCH_USER":
       return action.payload;

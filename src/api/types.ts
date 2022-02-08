@@ -17,11 +17,14 @@ export interface ISport {
     awayTeam: ITeam;
     results: IResult;
     note: string;
-    leagueId: string;
+    leagueID: string;
     day: string;
     time: string;
     homeAttendance: string[];
     awayAttendance: string[];
+  }
+  export interface IGamePost extends Omit<IGame, 'results'> {
+    results: IResultPost;
   }
   
   export interface IResultPost {
@@ -68,6 +71,24 @@ export interface ISport {
   
   export interface ILeague {
     _id: string;
+    description: string;
+    sport: ISport;
+    registrationOpen: string;
+    registrationClose: string;
+    seasonStart: string;
+    seasonEnd: string;
+    playoffStart: string;
+    playoffEnd: string;
+    teams: ITeam[];
+  }
+
+  export interface IDivision {
+    games: IGame[];
+    league: string;
+    maxTeams: number;
+    status: string;
+    teams: ITeam[];
+    timeSlot: string;
   }
   
   export interface IOrg {

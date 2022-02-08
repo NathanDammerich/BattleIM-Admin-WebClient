@@ -2,7 +2,7 @@ import React from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import useFetchData from "../../../hooks/useFetchData";
+import useFetchData, { APITypes } from "../../../hooks/useFetchData";
 import { Button, Card, Typography, Grid } from "@material-ui/core";
 import { addModal } from "../../../actions/modals.js";
 import useStyles from "./styles.js";
@@ -23,7 +23,7 @@ const months = [
 ];
 
 export default function League({ leagueFromParent, leagueID }) {
-  const [league] = useFetchData(leagueFromParent, leagueID, "league");
+  const [league] = useFetchData(leagueFromParent, leagueID, APITypes.league);
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
@@ -63,6 +63,10 @@ export default function League({ leagueFromParent, leagueID }) {
     return `${monthString} ${newDate.getDate()}`;
   };
 
+  const handleRuleClick = () => {
+    window.open(league.sport?.rules, "_blank");
+  };
+
   const classes = useStyles();
 
   return (
@@ -77,16 +81,7 @@ export default function League({ leagueFromParent, leagueID }) {
             </Grid>
 
             <Grid item xs={12}>
-              <a
-                href={league.sport.rules}
-                target="_blank"
-                rel="noreferrer"
-                className={classes.link}
-              >
-                <Typography variant="body1" color="primary">
-                  Rules
-                </Typography>
-              </a>
+              <Button onClick={handleRuleClick}>Rules</Button>
             </Grid>
 
             <Grid item xs={12}>

@@ -11,8 +11,4 @@ export default makeStyles((theme) => ({
   divisionHeading: {
     padding: "8px 0px 0px 0px",
   },
-  link: {
-    textDecoration: "none",
-    textTransform: "uppercase",
-  },
 }));
