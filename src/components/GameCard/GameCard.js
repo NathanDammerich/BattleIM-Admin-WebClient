@@ -56,7 +56,11 @@ const TableRow = ({ label, value, onClick }) => {
       onClick={onClick}
     >
       <Container>
-        <Typography color="primary" variant="body1" className={classes.bold}>
+        <Typography
+          color="primary"
+          variant="body1"
+          className={`${classes.bold} ${onClick ? classes.clickable : ""}`}
+        >
           {label}
         </Typography>
         <Typography color="primary" variant="body1">
@@ -85,15 +89,16 @@ export default function GameCard({ gameFromParent, gameID }) {
     }
   }, [gameFromParent, gameID]);
 
-  const homeIsWinner = game?.results && game?.homeTeam?._id === game?.results?.winningTeam
+  const homeIsWinner =
+    game?.results && game?.homeTeam?._id === game?.results?.winningTeam;
   const getScore = () => {
     if (!game?.results) {
-      return 'vs';
+      return "vs";
     }
     if (homeIsWinner) {
-      return `${game?.results.winningScore} - ${game?.results.losingScore}`
+      return `${game?.results.winningScore} - ${game?.results.losingScore}`;
     }
-    return `${game?.results.losingScore} - ${game?.results.winningScore}`
+    return `${game?.results.losingScore} - ${game?.results.winningScore}`;
   };
 
   const callOpenLeague = () => {
@@ -108,6 +113,15 @@ export default function GameCard({ gameFromParent, gameID }) {
       type: "EditGame",
       id: game._id,
       game,
+    };
+    dispatch(addModal(modal));
+  };
+  const callOpenAttendance = (team) => () => {
+    const modal = {
+      type: "Attendance",
+      id: game._id,
+      game,
+      team: game[team]
     };
     dispatch(addModal(modal));
   };
@@ -148,6 +162,16 @@ export default function GameCard({ gameFromParent, gameID }) {
               label="League"
               value={game.league}
               onClick={callOpenLeague}
+            />
+            <TableRow
+              label="Home Attendance"
+              value={game.homeAttendance?.length ?? "-"}
+              onClick={callOpenAttendance('homeTeam')}
+            />
+            <TableRow
+              label="Away Attendance"
+              value={game.awayAttendance?.length ?? "-"}
+              onClick={callOpenAttendance('awayTeam')}
             />
           </Grid>
         </Grid>

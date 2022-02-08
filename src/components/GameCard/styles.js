@@ -24,6 +24,7 @@ export default makeStyles((theme) => ({
     marginBottom: "15px",
   },
   clickable: {
+    textDecoration: "underline",
     "&:hover": {
       cursor: "pointer",
       fontWeight: "bold",
