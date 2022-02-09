@@ -8,6 +8,7 @@ import {
   IOrg,
   ISport,
   IQuiz,
+  IGamePost,
 } from "./types";
 
 export const API = axios.create({
@@ -20,7 +21,7 @@ export const getGames = () => API.get("/games");
 export const getGamesForOrgOnDate = (id: string, isoDate: string) =>
   API.post(`/orgs/${id}/date`, { isoDate: isoDate });
 export const getGame = (id: string) => API.get(`/games/${id}`);
-export const updateGame = (id: string, updatedGame: string) =>
+export const updateGame = (id: string, updatedGame: IGamePost | IGame) =>
   API.patch(`/games/${id}`, updatedGame);
 export const createGame = (newGame: IGame) => API.post("/games", newGame);
 export const updateResults = (id: string, results: IResultPost) =>

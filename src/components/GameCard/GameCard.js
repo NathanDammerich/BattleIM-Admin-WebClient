@@ -10,9 +10,9 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 
 import useStyles from "./styles";
-import { getGame } from "../../../api";
+import { getGame } from "../../api";
 import { useDispatch, useSelector } from "react-redux";
-import { addModal } from "../../../actions/modals";
+import { addModal } from "../../actions/modals";
 
 const TeamName = ({ game, team }) => {
   const classes = useStyles();
@@ -56,7 +56,11 @@ const TableRow = ({ label, value, onClick }) => {
       onClick={onClick}
     >
       <Container>
-        <Typography color="primary" variant="body1" className={classes.bold}>
+        <Typography
+          color="primary"
+          variant="body1"
+          className={`${classes.bold} ${onClick ? classes.clickable : ""}`}
+        >
           {label}
         </Typography>
         <Typography color="primary" variant="body1">
@@ -85,15 +89,16 @@ export default function GameCard({ gameFromParent, gameID }) {
     }
   }, [gameFromParent, gameID]);
 
-  const homeIsWinner = game?.results && game?.homeTeam?._id === game?.results?.winningTeam
+  const homeIsWinner =
+    game?.results && game?.homeTeam?._id === game?.results?.winningTeam;
   const getScore = () => {
     if (!game?.results) {
-      return 'vs';
+      return "vs";
     }
     if (homeIsWinner) {
-      return `${game?.results.winningScore} - ${game?.results.losingScore}`
+      return `${game?.results.winningScore} - ${game?.results.losingScore}`;
     }
-    return `${game?.results.losingScore} - ${game?.results.winningScore}`
+    return `${game?.results.losingScore} - ${game?.results.winningScore}`;
   };
 
   const callOpenLeague = () => {
@@ -103,11 +108,20 @@ export default function GameCard({ gameFromParent, gameID }) {
     };
     dispatch(addModal(modal));
   };
-  const callEditScore = () => {
+  const callEditGame = () => {
     const modal = {
-      type: "EditScore",
+      type: "EditGame",
       id: game._id,
       game,
+    };
+    dispatch(addModal(modal));
+  };
+  const callOpenAttendance = (team) => () => {
+    const modal = {
+      type: "Attendance",
+      id: game._id,
+      game,
+      team: game[team]
     };
     dispatch(addModal(modal));
   };
@@ -129,7 +143,7 @@ export default function GameCard({ gameFromParent, gameID }) {
                   {getScore()}
                 </Typography>
                 {isAdmin && (
-                  <IconButton size="small" onClick={callEditScore}>
+                  <IconButton size="small" onClick={callEditGame}>
                     <EditIcon fontSize="small" />
                   </IconButton>
                 )}
@@ -148,6 +162,16 @@ export default function GameCard({ gameFromParent, gameID }) {
               label="League"
               value={game.league}
               onClick={callOpenLeague}
+            />
+            <TableRow
+              label="Home Attendance"
+              value={game.homeAttendance?.length ?? "-"}
+              onClick={callOpenAttendance('homeTeam')}
+            />
+            <TableRow
+              label="Away Attendance"
+              value={game.awayAttendance?.length ?? "-"}
+              onClick={callOpenAttendance('awayTeam')}
             />
           </Grid>
         </Grid>
