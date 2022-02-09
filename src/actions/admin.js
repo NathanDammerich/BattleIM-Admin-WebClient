@@ -13,7 +13,6 @@ export const getAdmin = (id) => async (dispatch) => {
 export const signin = (formData, router) => async (dispatch) => {
   try {
     const { data } = await api.signin(formData);
-    console.log(data);
 
     dispatch({ type: "SIGN_IN", payload: data.admin });
   } catch (error) {
@@ -25,7 +24,6 @@ export const signin = (formData, router) => async (dispatch) => {
 export const attemptRefresh = () => async (dispatch) => {
   try {
     const { data } = await api.refreshUser();
-    console.log(data);
     dispatch({ type: "SIGN_IN", payload: data.admin });
   } catch (error) {
     dispatch({ type: "LOGOUT" });
