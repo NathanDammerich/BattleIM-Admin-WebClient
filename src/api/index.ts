@@ -11,8 +11,8 @@ import {
 } from "./types";
 
 export const API = axios.create({
-  //baseURL: "https://battleim-backend.herokuapp.com/",
-  baseURL: "http://localhost:5000",
+  baseURL: "https://battleim-backend.herokuapp.com/",
+  //baseURL: "http://localhost:5000",
   withCredentials: true,
 });
 
