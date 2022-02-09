@@ -11,9 +11,10 @@ import {
   IGamePost,
 } from "./types";
 
-const API = axios.create({
+export const API = axios.create({
   baseURL: "https://battleim-backend.herokuapp.com/",
   //baseURL: "http://localhost:5000",
+  withCredentials: true,
 });
 
 export const getGames = () => API.get("/games");
@@ -24,7 +25,7 @@ export const updateGame = (id: string, updatedGame: IGamePost | IGame) =>
   API.patch(`/games/${id}`, updatedGame);
 export const createGame = (newGame: IGame) => API.post("/games", newGame);
 export const updateResults = (id: string, results: IResultPost) =>
-  API.post(`/games/${id}/results`, {results});
+  API.post(`/games/${id}/results`, { results });
 
 export const getTeam = (id: string) => API.get(`/teams/${id}`);
 export const updateTeam = (id: string, updatedTeam: ITeam) =>
@@ -62,3 +63,10 @@ export const createQuiz = (newQuiz: IQuiz) => API.post("/quizzes", newQuiz);
 export const getDivision = (id: string) => API.get(`/divisions/${id}`);
 
 export const getAdmin = (id: string) => API.get(`/admins/${id}`);
+
+export const signin = (formData: any) =>
+  API.post("/auth/admin/signin", formData);
+export const signup = (formData: any) =>
+  API.post("/auth/admin/signup", formData);
+export const refreshUser = () => API.post("auth/admin/token");
+export const logout = () => API.post("/auth/admin/logout");

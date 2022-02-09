@@ -1,19 +1,30 @@
 import React, { useState } from "react";
 import { Container, Paper, Typography, Button } from "@material-ui/core";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 import logoWhiteBG from "../../images/logoWhiteBG.png";
 import useStyles from "./styles";
+import { signin } from "../../actions/admin";
 
 const Auth = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
-    history.push("/home");
+    dispatch(
+      signin(
+        {
+          email: email,
+          password: password,
+        },
+        history
+      )
+    );
   };
 
   const handleEmailChange = (e) => {
@@ -36,7 +47,7 @@ const Auth = () => {
           </Typography>
           <form className={classes.form} action="/" onSubmit={handleSubmit}>
             <div className={classes.inputContainer}>
-              <label for="email" className={classes.label}>
+              <label htmlFor="email" className={classes.label}>
                 Email
               </label>
               <input
@@ -49,7 +60,7 @@ const Auth = () => {
             </div>
             <div className={classes.inputContainer}>
               <div className={classes.passwordLabelRow}>
-                <label for="password" className={classes.label}>
+                <label htmlFor="password" className={classes.label}>
                   Password
                 </label>
                 <p className={classes.label}>Forgot your password?</p>
