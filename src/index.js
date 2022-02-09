@@ -7,6 +7,7 @@ import thunk from "redux-thunk";
 import { reducers } from "./reducers";
 import "./index.css";
 import App from "./App";
+import setupInterceptors from "./api/interceptors.js";
 
 const store = createStore(
   reducers,
@@ -24,3 +25,4 @@ ReactDOM.render(
   </Provider>,
   document.getElementById("root")
 );
+setupInterceptors(store);
