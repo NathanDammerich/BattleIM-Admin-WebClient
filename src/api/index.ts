@@ -17,6 +17,13 @@ export const API = axios.create({
   withCredentials: true,
 });
 
+interface APIType<Item> {
+  get: (id: string) => Promise<{ data: Item }>;
+  create: (newValue: Item) => Promise<{ data: Item }>;
+  update: (id: string, updateValue: Item) => Promise<{ data: Item }>;
+  list: () => Promise<{ data: Item[] }>;
+}
+
 export const getGames = () => API.get("/games");
 export const getGamesForOrgOnDate = (id: string, isoDate: string) =>
   API.post(`/orgs/${id}/date`, { isoDate: isoDate });
@@ -52,10 +59,13 @@ export const updateOrg = (id: string, updatedOrg: IOrg) =>
   API.patch(`/orgs/${id}`, updatedOrg);
 export const createOrg = (newOrg: IOrg) => API.post("/orgs", newOrg);
 
-export const getSport = (id: string) => API.get(`/sports/${id}`);
-export const updateSport = (id: string, updatedSport: ISport) =>
-  API.patch(`/sports/${id}`, updatedSport);
-export const createSport = (newSport: ISport) => API.post("/sports", newSport);
+export const Sport: APIType<ISport> = {
+  get: (id: string) => API.get(`/sports/${id}`),
+  update: (id: string, updatedSport: ISport) =>
+    API.patch(`/sports/${id}`, updatedSport),
+  create: (newSport: ISport) => API.post("/sports", newSport),
+  list: () => API.get("/sports"),
+};
 
 export const getQuiz = (id: string) => API.get(`/quizzes/${id}`);
 export const createQuiz = (newQuiz: IQuiz) => API.post("/quizzes", newQuiz);

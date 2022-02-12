@@ -1,7 +1,7 @@
 import { CircularProgress, TextField, Button, Box } from "@material-ui/core";
 import moment from "moment";
 import { useState, useEffect, useMemo } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AgGridColumn, AgGridReact, AgGridColumnProps } from "ag-grid-react";
 import { addModal } from "../../actions/modals";
 
@@ -37,14 +37,15 @@ export default function Leagues() {
     () => sports?.map((s) => s.leagues as unknown as ILeague[]).flat(),
     [sports]
   );
+  const admin = useSelector((state: any) => state.admin);
 
   useEffect(() => {
     setLoading(true);
-    getOrg("617f480dfec82da4aec5705c").then((response) => {
+    getOrg(admin.org._id).then((response) => {
       setOrg(response.data);
       setLoading(false);
     });
-  }, []);
+  }, [admin.org._id]);
 
   const openLeague = (id: string) => {
     const modal = {
@@ -68,7 +69,8 @@ export default function Leagues() {
       addModal({
         type: "MakeSport",
         id: undefined,
-        league: { org: org?._id },
+        sport: { org: org?._id },
+        sportList: Object.values(sportMap),
       })
     );
   };

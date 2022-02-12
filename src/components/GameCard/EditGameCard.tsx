@@ -63,12 +63,12 @@ export default function GameCard({
   const { results, homeTeam } = game;
   const [loading, setLoading] = useState(false);
   const [updatedResults, setUpdatedResults] = useState<IResultPost>({
-    winningScore: results.winningScore,
-    losingScore: results.losingScore,
+    winningScore: results?.winningScore ?? 0,
+    losingScore: results?.losingScore ?? 0,
     winningTeam:
-      game.homeTeam._id === results.winningTeam ? game.homeTeam : game.awayTeam,
+      game.homeTeam._id === results?.winningTeam ? game.homeTeam : game.awayTeam,
     losingTeam:
-      game.homeTeam._id !== results.winningTeam ? game.homeTeam : game.awayTeam,
+      game.homeTeam._id !== results?.winningTeam ? game.homeTeam : game.awayTeam,
   });
   const [error, setError] = useState<string | undefined>();
   const homeIsWinner =

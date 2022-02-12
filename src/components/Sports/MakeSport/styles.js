@@ -8,4 +8,7 @@ export default makeStyles((theme) => ({
     alignItems: "center",
     padding: "30px",
   },
+  field: {
+    margin: "5px",
+  },
 }));

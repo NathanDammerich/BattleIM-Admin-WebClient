@@ -11,6 +11,7 @@ import MakeLeague from "../Leagues/MakeLeague/MakeLeague";
 import Quiz from "../Quiz/Quiz";
 import { removeModal } from "../../actions/modals";
 import MakeTeam from "../Leagues/MakeTeam/MakeTeam";
+import MakeSport from "../Sports/MakeSport";
 import User from "../User/User";
 import EditScore from "../ScoreEditModal/ScoreEdit";
 import Attendance from "../Attendance/Attendance";
@@ -22,6 +23,7 @@ const modalTypeToComponent = {
   Team: TeamCard,
   League,
   MakeLeague,
+  MakeSport,
   Quiz,
   MakeTeam,
   User,
@@ -39,6 +41,7 @@ const modalTypeToParams = {
   }),
   League: (modal) => ({ leagueID: modal.id }),
   MakeLeague: (modal) => modal,
+  MakeSport: (modal) => modal,
   Quiz: (modal) => ({ quizID: modal.id }),
   MakeTeam: (modal) => ({ divisionID: modal.id }),
   User: () => ({}),

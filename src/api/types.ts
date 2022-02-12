@@ -29,11 +29,11 @@ export interface IGame {
   leagueId: string;
   day?: string;
   time?: string;
-  homeAttendance: string[];
-  awayAttendance: string[];
+  homeAttendance?: string[];
+  awayAttendance?: string[];
 }
 export interface IGamePost extends Omit<IGame, "results"> {
-  results: IResultPost;
+  results?: IResultPost;
 }
 
 export interface IResultPost {
@@ -102,6 +102,7 @@ export interface IDivision {
 
 export interface IOrg {
   _id: string;
+  sports?: ISport[];
 }
 
 export interface IQuiz {
