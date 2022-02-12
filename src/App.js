@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { Container, ThemeProvider } from "@material-ui/core";
 import { createTheme } from "@material-ui/core/styles";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import Adapter from "@mui/lab/AdapterMoment";
 
-import { attemptRefresh, getAdmin } from "./actions/admin";
+import { attemptRefresh } from "./actions/admin";
 import Modal from "./components/Modal/Modal";
 import Auth from "./components/Auth/Auth";
 import Home from "./pages/Home/Home";

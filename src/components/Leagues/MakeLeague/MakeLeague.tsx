@@ -1,4 +1,4 @@
-import { TextField, Button, Card } from "@material-ui/core";
+import { TextField, Button, Card, TextFieldProps } from "@material-ui/core";
 import React from "react";
 import { ILeague } from "../../../api/types";
 import useStyles from "./styles.js";
@@ -23,58 +23,80 @@ export default function MakeLeague(props: IMakeLeague) {
   };
   const classes = useStyles();
 
-  const FieldEditor = ({
-    field,
-    type,
-    label,
-  }: {
-    field: keyof ILeague;
-    label: string;
-    type?: string;
-  }) => (
-    <TextField
-      label={label}
-      type={type}
-      onChange={handleUpdate(field)}
-      value={league[field]}
-      InputLabelProps={{ shrink: true }}
-    />
+  const editorProps = React.useCallback(
+    ({
+      field,
+      type,
+      label,
+      disabled,
+    }: {
+      field: keyof ILeague;
+      label: string;
+      type?: string;
+      disabled?: boolean;
+    }): TextFieldProps => ({
+      label,
+      type,
+      disabled,
+      onChange: handleUpdate(field),
+      defaultValue: league[field],
+      InputLabelProps: { shrink: true },
+      className: classes.field,
+    }),
+    [league]
   );
 
   return (
     <>
       {league && (
         <Card raised className={classes.card}>
-          <FieldEditor label={"League Description"} field="description" />
-          <FieldEditor
-            label="Registration Start"
-            type="datetime-local"
-            field={"registrationOpen"}
+          <TextField
+            {...editorProps({
+              label: "League Description",
+              field: "description",
+            })}
           />
-          <FieldEditor
-            label="Registration End"
-            type="datetime-local"
-            field={"registrationClose"}
+          <TextField
+            {...editorProps({
+              label: "Registration Start",
+              field: "registrationOpen",
+              type: 'datetime-local',
+            })}
           />
-          <FieldEditor
-            label="Season Start"
-            type="datetime-local"
-            field="seasonStart"
+          <TextField
+            {...editorProps({
+              label: "Registration End",
+              field: "registrationClose",
+              type: 'datetime-local',
+            })}
           />
-          <FieldEditor
-            label="Season End"
-            type="datetime-local"
-            field="seasonEnd"
+          <TextField
+            {...editorProps({
+              label: "Season Start",
+              field: "seasonStart",
+              type: 'datetime-local',
+            })}
           />
-          <FieldEditor
-            label="Playoffs Start"
-            type="datetime-local"
-            field="playoffStart"
+          <TextField
+            {...editorProps({
+              label: "Season End",
+              field: "seasonEnd",
+              type: 'datetime-local',
+            })}
           />
-          <FieldEditor
-            label="Playoffs End"
-            type="datetime-local"
-            field="playoffEnd"
+          <TextField
+            {...editorProps({
+              label: "Playoffs Start",
+              field: "playoffStart",
+              type: 'datetime-local',
+            })}
+          />
+          <TextField
+            {...editorProps({
+              label: "Playoffs End",
+              field: "playoffEnd",
+              type: 'datetime-local',
+            })}
           />
           <Button onClick={props.onClose}>Cancel</Button>
           <Button color="primary" variant="contained" onClick={handleSubmit}>

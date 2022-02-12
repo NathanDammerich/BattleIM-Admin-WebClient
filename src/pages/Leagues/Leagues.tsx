@@ -1,12 +1,12 @@
 import { CircularProgress, TextField, Button, Box } from "@material-ui/core";
 import moment from "moment";
-import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { AgGridColumn, AgGridReact, AgGridColumnProps } from "ag-grid-react";
 import { addModal } from "../../actions/modals";
 
 import { getOrg } from "../../api";
-import { ILeague, ISport } from "../../api/types";
+import { ILeague, IOrg } from "../../api/types";
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-material.css";
@@ -23,21 +23,29 @@ const getSeasonStatus = (league: ILeague) => {
 };
 
 export default function Leagues() {
-  const [leagues, setLeagues] = useState<ILeague[]>([]);
-  const [sportMap, setSports] = useState<Record<string, ISport>>({});
+  const [org, setOrg] = useState<IOrg>();
   const [loading, setLoading] = useState(false);
   const [quickFilter, setQuickFilter] = useState("");
   const dispatch = useDispatch();
 
+  const { sports } = org ?? {};
+  const sportMap = useMemo(
+    () => Object.fromEntries(sports?.map((s) => [s._id, s]) ?? []),
+    [sports]
+  );
+  const leagues = useMemo(
+    () => sports?.map((s) => s.leagues as unknown as ILeague[]).flat(),
+    [sports]
+  );
+  const admin = useSelector((state: any) => state.admin);
+
   useEffect(() => {
     setLoading(true);
-    getOrg("617f480dfec82da4aec5705c").then((org) => {
-      const sports = org.data.sports as ISport[];
-      setSports(Object.fromEntries(sports.map((s) => [s._id, s])));
-      setLeagues(sports.map((s) => s.leagues as unknown as ILeague[]).flat());
+    getOrg(admin.org._id).then((response) => {
+      setOrg(response.data);
       setLoading(false);
     });
-  }, []);
+  }, [admin.org._id]);
 
   const openLeague = (id: string) => {
     const modal = {
@@ -53,6 +61,16 @@ export default function Leagues() {
         type: "MakeLeague",
         id: undefined,
         league: {},
+      })
+    );
+  };
+  const makeSport = () => {
+    dispatch(
+      addModal({
+        type: "MakeSport",
+        id: undefined,
+        sport: { org: org?._id },
+        sportList: Object.values(sportMap),
       })
     );
   };
@@ -102,6 +120,7 @@ export default function Leagues() {
           variant="outlined"
           className={classes.filterInput}
         />
+        <Button onClick={makeSport}>Make Sport</Button>
         <Button onClick={makeLeague}>Make League</Button>
       </Box>
       <div className={`ag-theme-material ${classes.tableWrapper}`}>

@@ -5,7 +5,7 @@ import {
   Typography,
   Grid,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 
 import useClasses from "./styles.js";
