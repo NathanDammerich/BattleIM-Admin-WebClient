@@ -51,7 +51,7 @@ export const findUsers = (orgID: string, queryString: string) =>
 export const getLeague = (id: string) => API.get(`/leagues/${id}`);
 export const updateLeague = (id: string, updatedLeague: ILeague) =>
   API.patch(`/leagues/${id}`, updatedLeague);
-export const createLeague = (newLeague: string) =>
+export const createLeague = (newLeague: ILeague) =>
   API.post("/leagues", newLeague);
 
 export const getOrg = (id: string) => API.get(`/orgs/${id}`);

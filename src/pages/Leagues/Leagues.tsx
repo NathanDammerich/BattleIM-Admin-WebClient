@@ -61,6 +61,7 @@ export default function Leagues() {
         type: "MakeLeague",
         id: undefined,
         league: {},
+        sports
       })
     );
   };

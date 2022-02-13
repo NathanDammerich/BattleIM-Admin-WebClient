@@ -1,15 +1,9 @@
-import {
-  TextField,
-  Button,
-  Card,
-  TextFieldProps,
-  Select,
-} from "@material-ui/core";
+import { TextField, Button, Card, TextFieldProps, FormControl, InputLabel } from "@material-ui/core";
 import React from "react";
 import { ISport } from "../../../api/types";
 import { Sport } from "../../../api";
 import useStyles from "./styles";
-import { useCallback } from "react";
+import SportPicker from "../SportPicker";
 
 interface IMakeSport {
   sport: ISport;
@@ -20,9 +14,6 @@ interface IMakeSport {
 
 export default function MakeSport(props: IMakeSport) {
   const [sport, setSport] = React.useState<ISport>(props.sport);
-  const [sportList, setSportList] = React.useState<ISport[]>(
-    props.sportList ?? []
-  );
 
   const handleUpdate =
     (indexKey: keyof ISport) =>
@@ -32,12 +23,6 @@ export default function MakeSport(props: IMakeSport) {
         [indexKey]: event.target.value,
       }));
     };
-
-  React.useEffect(() => {
-    Sport.list()
-      .then(({ data }) => setSportList(data))
-      .catch(() => setSportList(sportList));
-  }, []);
 
   const handleSubmit = async () => {
     if (!sport._id) {
@@ -49,11 +34,7 @@ export default function MakeSport(props: IMakeSport) {
   };
   const classes = useStyles();
 
-  const handleExistingSportSelect = (id: unknown): void => {
-    setSport(sportList.find((s) => s._id === id) ?? sport);
-  };
-
-  const editorProps = useCallback(
+  const editorProps = React.useCallback(
     ({
       field,
       type,
@@ -69,7 +50,7 @@ export default function MakeSport(props: IMakeSport) {
       type,
       disabled,
       onChange: handleUpdate(field),
-      defaultValue: sport[field],
+      value: sport[field],
       InputLabelProps: { shrink: true },
       className: classes.field,
     }),
@@ -80,21 +61,18 @@ export default function MakeSport(props: IMakeSport) {
     <>
       {sport && (
         <Card raised className={classes.card}>
-          <Select
-            fullWidth
-            label={"Select existing sport"}
-            value={sport._id}
-            onChange={(e) => handleExistingSportSelect(e.target.value)}
-          >
-            <option value={undefined}>New Sport</option>
-            {sportList.map((s) => {
-              return (
-                <option key={s._id} value={s._id}>
-                  {s.description}
-                </option>
-              );
-            })}
-          </Select>
+          <FormControl fullWidth>
+            <InputLabel id="make-league-sport-picker">Select Sport</InputLabel>
+            <SportPicker
+              id="make-league-sport-picker"
+              labelId="make-league-sport-picker"
+              label="Select Sport"
+              defaultValue={sport}
+              onChange={(s) => setSport(s ?? sport)}
+              sports={props.sportList ?? []}
+              allowNew={true}
+            />
+          </FormControl>
           <TextField
             {...editorProps({ field: "description", label: "Sport Name" })}
           />
