@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import { Container, Paper, Typography, Button } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { GoogleLogin } from "react-google-login";
 
+import { signin } from "../../actions/admin";
+import { googleAuthSuccess } from "../../actions/admin";
 import logoWhiteBG from "../../images/logoWhiteBG.png";
 import useStyles from "./styles";
-import { signin } from "../../actions/admin";
+import Icon from "./icon.js";
 
 const Auth = () => {
   const classes = useStyles();
@@ -33,6 +36,16 @@ const Auth = () => {
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
+  };
+
+  const googleSuccess = async (res) => {
+    console.log("google success");
+    dispatch(googleAuthSuccess(res.tokenId));
+  };
+
+  const googleFailure = (err) => {
+    console.log("google failure");
+    console.log(err);
   };
 
   return (
@@ -90,14 +103,25 @@ const Auth = () => {
               Continue
             </Button>
           </form>
-          <Button
-            variant="text"
-            color="primary"
-            fullWidth
-            className={classes.continueButton}
-          >
-            Use single sign-on (SSO) instead
-          </Button>
+          <GoogleLogin
+            clientId="451600223630-o1sf43rnm26bg390ebu6ft3190edkdar.apps.googleusercontent.com"
+            render={(renderProps) => (
+              <Button
+                className={classes.googleButton}
+                color="primary"
+                fullWidth
+                onClick={renderProps.onClick}
+                disabled={renderProps.disabled}
+                startIcon={<Icon />}
+                variant="contained"
+              >
+                Sign In With Google
+              </Button>
+            )}
+            onSuccess={googleSuccess}
+            onFailure={googleFailure}
+            cookiePolicy="single_host_origin"
+          />
         </Container>
       </Paper>
     </Container>

@@ -80,3 +80,6 @@ export const signup = (formData: any) =>
   API.post("/auth/admin/signup", formData);
 export const refreshUser = () => API.post("auth/admin/token");
 export const logout = () => API.post("/auth/admin/logout");
+
+export const googleSignIn = (token: any) =>
+  API.post("auth/admin/googlesignin", { token: token });
