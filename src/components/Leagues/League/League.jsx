@@ -1,9 +1,10 @@
-import { Button, Card, Typography, Grid } from "@material-ui/core";
+import { Button, Card, Typography, Grid, Box } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import useFetchData, { APITypes } from "../../../hooks/useFetchData";
 import buildSchedule from "../../../utilities/buildSchedule";
 import useStyles from "./styles.js";
-import {addModal} from '../../../actions/modals';
+import { addModal } from "../../../actions/modals";
+import { displayTimeslot } from "../../../utilities/displayTimeslot";
 
 const months = [
   "January",
@@ -35,7 +36,7 @@ export default function League({ leagueFromParent, leagueID }) {
         "1/1/2020 14:00",
         "Monday",
         20,
-        division?.teams.map((t, k) => ({...t, _id: `${t._id}${k}`})),
+        division?.teams.map((t, k) => ({ ...t, _id: `${t._id}${k}` })),
         league,
         "Anywhere"
       )
@@ -60,8 +61,19 @@ export default function League({ leagueFromParent, leagueID }) {
         league,
       })
     );
-
-  }
+  };
+  const handleCreateDivision = () => {
+    dispatch(
+      addModal({
+        type: "MakeDivision",
+        id: undefined,
+        division: {
+          league: league._id,
+        },
+        league,
+      })
+    );
+  };
 
   const classes = useStyles();
 
@@ -108,7 +120,7 @@ export default function League({ leagueFromParent, leagueID }) {
               )} - ${getDateString(league.playoffEnd)}`}</Typography>
             </Grid>
 
-            <Grid item xs={12} align="center">
+            <Box display="flex" justifyContent="space-between" width="100%">
               <Typography
                 variant="h6"
                 color="secondary"
@@ -116,7 +128,8 @@ export default function League({ leagueFromParent, leagueID }) {
               >
                 Divisions
               </Typography>
-            </Grid>
+              <Button onClick={handleCreateDivision}>Make Division</Button>
+            </Box>
             {league.divisions.map((division) => (
               <Grid
                 item
@@ -127,7 +140,7 @@ export default function League({ leagueFromParent, leagueID }) {
               >
                 <Grid item xs={6}>
                   <Typography variant="body1" color="primary" align="left">
-                    {division.timeSlot}
+                    {displayTimeslot(division.timeSlot)}
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>

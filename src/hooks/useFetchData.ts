@@ -4,9 +4,9 @@ import {
   getGame,
   getTeam,
   getQuiz,
-  getDivision,
   getGamesForOrgOnDate,
   getAdmin,
+  Division,
 } from "../api";
 
 export enum APITypes {
@@ -29,7 +29,7 @@ const APITypesToFnMap: Record<
   [APITypes.game]: getGame,
   [APITypes.team]: getTeam,
   [APITypes.quiz]: getQuiz,
-  [APITypes.division]: getDivision,
+  [APITypes.division]: Division.get,
 };
 
 const getKey = (dataId: string, identifier: APITypes) =>

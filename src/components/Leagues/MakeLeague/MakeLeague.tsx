@@ -4,13 +4,12 @@ import {
   Card,
   TextFieldProps,
   Select,
-  InputLabel,
-  FormControl,
 } from "@material-ui/core";
 import React from "react";
 import { createLeague, updateLeague } from "../../../api";
 import { ILeague, ISport } from "../../../api/types";
-import SportPicker from "../../Sports/SportPicker";
+import PickerBase from "../../Picker/PickerBase";
+import SportPicker from "../../Picker/SportsPicker";
 import useStyles from "./styles.js";
 
 export interface IMakeLeague {
@@ -70,28 +69,20 @@ export default function MakeLeague(props: IMakeLeague) {
     <>
       {league && (
         <Card raised className={classes.card}>
-          <FormControl fullWidth>
-            <InputLabel id="make-league-sport-picker">Select Sport</InputLabel>
-            <SportPicker
-              labelId="make-league-sport-picker"
-              id="make-league-sport-picker"
-              label="Select Sport"
-              defaultValue={defaultSport}
-              onChange={(s) =>
-                handleUpdate("sport")({ target: { value: s ?? league.sport } })
-              }
-              sports={props.sports ?? []}
-            />
-          </FormControl>
-          <FormControl fullWidth>
-            <InputLabel id="make-league-league-type">
-              Select League Type
-            </InputLabel>
+          <SportPicker
+            labelId="make-league-sport-picker"
+            id="make-league-sport-picker"
+            label="Select Sport"
+            defaultValue={defaultSport}
+            onChange={(s) =>
+              handleUpdate("sport")({ target: { value: s ?? league.sport } })
+            }
+            sports={props.sports ?? []}
+          />
+          <PickerBase id="make-league-league-type" label="Select League Type">
             <Select
               fullWidth
               labelId="make-league-league-type"
-              id="make-league-league-type"
-              label="Select League Type"
               onChange={(e) =>
                 handleUpdate("description")({
                   target: { value: e.target.value as string },
@@ -102,7 +93,7 @@ export default function MakeLeague(props: IMakeLeague) {
               <option value="Mens">Mens</option>
               <option value="Womens">Womens</option>
             </Select>
-          </FormControl>
+          </PickerBase>
           <TextField
             {...editorProps({
               label: "Registration Start",

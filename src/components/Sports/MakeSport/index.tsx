@@ -1,9 +1,14 @@
-import { TextField, Button, Card, TextFieldProps, FormControl, InputLabel } from "@material-ui/core";
+import {
+  TextField,
+  Button,
+  Card,
+  TextFieldProps,
+} from "@material-ui/core";
 import React from "react";
 import { ISport } from "../../../api/types";
 import { Sport } from "../../../api";
 import useStyles from "./styles";
-import SportPicker from "../SportPicker";
+import SportPicker from "../../Picker/SportsPicker";
 
 interface IMakeSport {
   sport: ISport;
@@ -61,18 +66,15 @@ export default function MakeSport(props: IMakeSport) {
     <>
       {sport && (
         <Card raised className={classes.card}>
-          <FormControl fullWidth>
-            <InputLabel id="make-league-sport-picker">Select Sport</InputLabel>
-            <SportPicker
-              id="make-league-sport-picker"
-              labelId="make-league-sport-picker"
-              label="Select Sport"
-              defaultValue={sport}
-              onChange={(s) => setSport(s ?? sport)}
-              sports={props.sportList ?? []}
-              allowNew={true}
-            />
-          </FormControl>
+          <SportPicker
+            id="make-league-sport-picker"
+            labelId="make-league-sport-picker"
+            label="Select Sport"
+            defaultValue={sport}
+            onChange={(s) => setSport(s ?? sport)}
+            sports={props.sportList ?? []}
+            allowNew={true}
+          />
           <TextField
             {...editorProps({ field: "description", label: "Sport Name" })}
           />
