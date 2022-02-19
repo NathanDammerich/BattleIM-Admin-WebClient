@@ -1,10 +1,21 @@
-import { TextField, Button, Card, TextFieldProps } from "@material-ui/core";
+import {
+  TextField,
+  Button,
+  Card,
+  TextFieldProps,
+  Select,
+  InputLabel,
+  FormControl,
+} from "@material-ui/core";
 import React from "react";
-import { ILeague } from "../../../api/types";
+import { createLeague, updateLeague } from "../../../api";
+import { ILeague, ISport } from "../../../api/types";
+import SportPicker from "../../Sports/SportPicker";
 import useStyles from "./styles.js";
 
-interface IMakeLeague {
+export interface IMakeLeague {
   league: ILeague;
+  sports: ISport[];
   id: string;
   onClose: () => void;
 }
@@ -18,8 +29,13 @@ export default function MakeLeague(props: IMakeLeague) {
       setLeague({ ...league, [indexKey]: event.target.value });
     };
 
-  const handleSubmit = () => {
-    console.log(league);
+  const handleSubmit = async () => {
+    if (league._id) {
+      await updateLeague(league._id, league);
+    } else {
+      await createLeague(league);
+    }
+    props.onClose();
   };
   const classes = useStyles();
 
@@ -46,56 +62,87 @@ export default function MakeLeague(props: IMakeLeague) {
     [league]
   );
 
+  const defaultSport = league.sport?._id
+    ? league.sport
+    : props.sports.find((s) => s._id === (league.sport as unknown as string));
+
   return (
     <>
       {league && (
         <Card raised className={classes.card}>
-          <TextField
-            {...editorProps({
-              label: "League Description",
-              field: "description",
-            })}
-          />
+          <FormControl fullWidth>
+            <InputLabel id="make-league-sport-picker">Select Sport</InputLabel>
+            <SportPicker
+              labelId="make-league-sport-picker"
+              id="make-league-sport-picker"
+              label="Select Sport"
+              defaultValue={defaultSport}
+              onChange={(s) =>
+                handleUpdate("sport")({ target: { value: s ?? league.sport } })
+              }
+              sports={props.sports ?? []}
+            />
+          </FormControl>
+          <FormControl fullWidth>
+            <InputLabel id="make-league-league-type">
+              Select League Type
+            </InputLabel>
+            <Select
+              fullWidth
+              labelId="make-league-league-type"
+              id="make-league-league-type"
+              label="Select League Type"
+              onChange={(e) =>
+                handleUpdate("description")({
+                  target: { value: e.target.value as string },
+                })
+              }
+            >
+              <option value="Coed">Coed</option>
+              <option value="Mens">Mens</option>
+              <option value="Womens">Womens</option>
+            </Select>
+          </FormControl>
           <TextField
             {...editorProps({
               label: "Registration Start",
               field: "registrationOpen",
-              type: 'datetime-local',
+              type: "datetime-local",
             })}
           />
           <TextField
             {...editorProps({
               label: "Registration End",
               field: "registrationClose",
-              type: 'datetime-local',
+              type: "datetime-local",
             })}
           />
           <TextField
             {...editorProps({
               label: "Season Start",
               field: "seasonStart",
-              type: 'datetime-local',
+              type: "datetime-local",
             })}
           />
           <TextField
             {...editorProps({
               label: "Season End",
               field: "seasonEnd",
-              type: 'datetime-local',
+              type: "datetime-local",
             })}
           />
           <TextField
             {...editorProps({
               label: "Playoffs Start",
               field: "playoffStart",
-              type: 'datetime-local',
+              type: "datetime-local",
             })}
           />
           <TextField
             {...editorProps({
               label: "Playoffs End",
               field: "playoffEnd",
-              type: 'datetime-local',
+              type: "datetime-local",
             })}
           />
           <Button onClick={props.onClose}>Cancel</Button>

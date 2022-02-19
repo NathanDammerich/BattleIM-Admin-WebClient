@@ -24,7 +24,7 @@ export default makeStyles((theme) => ({
   inputContainer: {
     display: "flex",
     flexDirection: "column",
-    paddingTop: theme.spacing(3),
+    paddingTop: theme.spacing(2),
     maxWidth: "350px",
     width: "100%",
   },
@@ -46,7 +46,7 @@ export default makeStyles((theme) => ({
     alignItems: "center",
   },
   continueButton: {
-    marginTop: "30px",
+    marginTop: theme.spacing(2),
     textTransform: "capitalize",
   },
   logo: {
@@ -65,5 +65,9 @@ export default makeStyles((theme) => ({
   },
   primary: {
     color: theme.palette.primary.main,
+  },
+  googleButton: {
+    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(2),
   },
 }));

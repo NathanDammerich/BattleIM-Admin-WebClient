@@ -51,7 +51,7 @@ export const findUsers = (orgID: string, queryString: string) =>
 export const getLeague = (id: string) => API.get(`/leagues/${id}`);
 export const updateLeague = (id: string, updatedLeague: ILeague) =>
   API.patch(`/leagues/${id}`, updatedLeague);
-export const createLeague = (newLeague: string) =>
+export const createLeague = (newLeague: ILeague) =>
   API.post("/leagues", newLeague);
 
 export const getOrg = (id: string) => API.get(`/orgs/${id}`);
@@ -80,3 +80,6 @@ export const signup = (formData: any) =>
   API.post("/auth/admin/signup", formData);
 export const refreshUser = () => API.post("auth/admin/token");
 export const logout = () => API.post("/auth/admin/logout");
+
+export const googleSignIn = (token: any) =>
+  API.post("auth/admin/googlesignin", { token: token });
