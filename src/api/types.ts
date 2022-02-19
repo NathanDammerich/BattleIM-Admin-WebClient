@@ -91,13 +91,19 @@ export interface ILeague {
   teams: ITeam[];
 }
 
+export interface ITimeslot {
+  day: DOW;
+  timeStart: Date;
+  timeEnd: Date;
+}
 export interface IDivision {
+  _id: string;
   games: IGame[];
   league: string;
   maxTeams: number;
   status: string;
   teams: ITeam[];
-  timeSlot: string;
+  timeSlot: string | ITimeslot[];
 }
 
 export interface IOrg {

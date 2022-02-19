@@ -9,6 +9,7 @@ import {
   ISport,
   IQuiz,
   IGamePost,
+  IDivision,
 } from "./types";
 
 export const API = axios.create({
@@ -67,10 +68,13 @@ export const Sport: APIType<ISport> = {
   list: () => API.get("/sports"),
 };
 
+export const Division: Omit<APIType<IDivision>, "update" | "list"> = {
+  get: (id: string) => API.get(`/divisions/${id}`),
+  create: (newDivision: IDivision) => API.post("/division", newDivision),
+};
+
 export const getQuiz = (id: string) => API.get(`/quizzes/${id}`);
 export const createQuiz = (newQuiz: IQuiz) => API.post("/quizzes", newQuiz);
-
-export const getDivision = (id: string) => API.get(`/divisions/${id}`);
 
 export const getAdmin = (id: string) => API.get(`/admins/${id}`);
 
