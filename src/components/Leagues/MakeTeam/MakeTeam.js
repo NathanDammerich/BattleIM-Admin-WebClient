@@ -2,6 +2,7 @@ import { Card, Grid, Typography, Button } from "@material-ui/core";
 import React, { useState } from "react";
 import { createTeam } from "../../../actions/teams";
 import { useDispatch, useSelector } from "react-redux";
+import { displayTimeslot } from "../../../utilities/displayTimeslot";
 
 import useFetchData from "../../../hooks/useFetchData";
 import useStyles from "./styles";
@@ -35,10 +36,9 @@ export default function MakeTeam({ divisionID }) {
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography
-                variant="h6"
-                align="center"
-              >{`${division.league.sport.description}: ${division.timeSlot}`}</Typography>
+              <Typography variant="h6" align="center">{`${
+                division.league.sport.description
+              }: ${displayTimeslot(division.timeSlot)}`}</Typography>
             </Grid>
             <Grid item xs={12} align="center">
               <form className={classes.form} action="/" autoComplete="off">

@@ -4,6 +4,7 @@ import useFetchData, { APITypes } from "../../../hooks/useFetchData";
 import buildSchedule from "../../../utilities/buildSchedule";
 import useStyles from "./styles.js";
 import { addModal } from "../../../actions/modals";
+import { displayTimeslot } from "../../../utilities/displayTimeslot";
 
 const months = [
   "January",
@@ -139,7 +140,7 @@ export default function League({ leagueFromParent, leagueID }) {
               >
                 <Grid item xs={6}>
                   <Typography variant="body1" color="primary" align="left">
-                    {division.timeSlot}
+                    {displayTimeslot(division.timeSlot)}
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
