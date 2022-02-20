@@ -68,9 +68,11 @@ export const Sport: APIType<ISport> = {
   list: () => API.get("/sports"),
 };
 
-export const Division: Omit<APIType<IDivision>, "update" | "list"> = {
+export const Division: Omit<APIType<IDivision>, "list"> = {
   get: (id: string) => API.get(`/divisions/${id}`),
   create: (newDivision: IDivision) => API.post("/divisions", newDivision),
+  update: (id: string, newDivision: IDivision) =>
+    API.patch(`/division/${id}`, newDivision),
 };
 
 export const getQuiz = (id: string) => API.get(`/quizzes/${id}`);
