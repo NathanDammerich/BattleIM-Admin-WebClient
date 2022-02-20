@@ -17,10 +17,12 @@ import User from "../User/User";
 import EditScore from "../ScoreEditModal/ScoreEdit";
 import Attendance from "../Attendance/Attendance";
 import EditGame from "../GameCard/EditGameCard";
+import MakeGames from '../MakeGames';
 
 const modalTypeToComponent = {
   Game: GameCard,
   EditGame,
+  MakeGames,
   Team: TeamCard,
   League,
   MakeDivision,
@@ -35,6 +37,7 @@ const modalTypeToComponent = {
 
 const modalTypeToParams = {
   Game: (modal) => ({ gameID: modal.id }),
+  MakeGames: (modal) => modal,
   EditGame: (modal) => modal,
   Team: (modal) => ({
     teamFromParent: null,

@@ -38,7 +38,7 @@ export default function MakeTeam({ divisionID }) {
             <Grid item xs={12}>
               <Typography variant="h6" align="center">{`${
                 division.league.sport.description
-              }: ${displayTimeslot(division.timeSlot)}`}</Typography>
+              }: ${displayTimeslot(division.timeSlot[0])}`}</Typography>
             </Grid>
             <Grid item xs={12} align="center">
               <form className={classes.form} action="/" autoComplete="off">

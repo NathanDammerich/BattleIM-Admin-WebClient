@@ -1,5 +1,6 @@
 import moment from "moment";
 import { DOW, IGame, ILeague, ITeam } from "../../api/types";
+import { v4 as uuidv4 } from 'uuid';
 
 enum DOWVal {
   "Sunday",
@@ -85,7 +86,7 @@ const buildSchedule = (
       .toLocaleString();
 
     return {
-      _id: "new_placeholder",
+      _id: uuidv4(),
       homeTeam: teamMap[homeId],
       awayTeam: teamMap[awayId],
       date: gameDate,

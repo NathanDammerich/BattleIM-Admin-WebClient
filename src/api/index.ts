@@ -31,7 +31,7 @@ export const getGamesForOrgOnDate = (id: string, isoDate: string) =>
 export const getGame = (id: string) => API.get(`/games/${id}`);
 export const updateGame = (id: string, updatedGame: IGamePost | IGame) =>
   API.patch(`/games/${id}`, updatedGame);
-export const createGame = (newGame: IGame) => API.post("/games", newGame);
+export const createGames = (newGames: IGame[]) => API.post("/games", newGames);
 export const updateResults = (id: string, results: IResultPost) =>
   API.post(`/games/${id}/results`, { results });
 

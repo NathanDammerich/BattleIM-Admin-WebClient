@@ -12,7 +12,9 @@ import {
 import useStyles from "./styles";
 import { getGame } from "../../api";
 import { updateGame } from "../../api";
-import { IGame, IResultPost, ITeam } from "../../api/types";
+import { IGame, IGamePost, IResultPost, ITeam } from "../../api/types";
+import { AxiosResponse } from "axios";
+import moment from "moment";
 
 const TeamName = ({ game, team }: { game: IGame; team: ITeam }) => {
   const classes = useStyles();
@@ -53,10 +55,17 @@ const EditableValue = ({
 
 export default function GameCard({
   game: initialGame,
+  updateGameCallback = updateGame,
   id,
+  onClose,
 }: {
+  onClose: () => void;
   game: IGame;
   id: string;
+  updateGameCallback?: (
+    id: string,
+    game: IGamePost | IGame
+  ) => Promise<AxiosResponse<any, any>>;
 }) {
   const classes = useStyles();
   const [game, setGame] = useState<IGame>(initialGame);
@@ -66,9 +75,13 @@ export default function GameCard({
     winningScore: results?.winningScore ?? 0,
     losingScore: results?.losingScore ?? 0,
     winningTeam:
-      game.homeTeam._id === results?.winningTeam ? game.homeTeam : game.awayTeam,
+      game.homeTeam._id === results?.winningTeam
+        ? game.homeTeam
+        : game.awayTeam,
     losingTeam:
-      game.homeTeam._id !== results?.winningTeam ? game.homeTeam : game.awayTeam,
+      game.homeTeam._id !== results?.winningTeam
+        ? game.homeTeam
+        : game.awayTeam,
   });
   const [error, setError] = useState<string | undefined>();
   const homeIsWinner =
@@ -81,9 +94,11 @@ export default function GameCard({
     : updatedResults.losingScore;
 
   useEffect(() => {
-    getGame(id).then((game) => {
-      setGame(game.data);
-    });
+    if (!initialGame) {
+      getGame(id).then((game) => {
+        setGame(game.data);
+      });
+    }
   }, [initialGame, id]);
 
   const handleUpdateResults =
@@ -121,7 +136,8 @@ export default function GameCard({
     setLoading(true);
     setError(undefined);
     try {
-      await updateGame(game._id, { ...game, results: updatedResults });
+      await updateGameCallback(game._id, { ...game, results: updatedResults });
+      onClose();
     } catch (e: any) {
       setError(e.message);
     }
@@ -129,7 +145,7 @@ export default function GameCard({
   };
 
   const handleUpdateGame =
-    (key: string) =>
+    (key: keyof IGame) =>
     (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
       setGame({ ...game, [key]: e.target.value });
     };
@@ -184,8 +200,12 @@ export default function GameCard({
               />
             </Box>
             <Box display="flex" flexDirection="column" margin="20px">
-              <EditableValue label="Date" value={game.day} disabled />
-              <EditableValue label="Time" value={game.time} disabled />
+              <EditableValue
+                label="Date"
+                value={moment(game.date).format('YYYY-MM-DDTHH:mm')}
+                type="datetime-local"
+                onChange={handleUpdateGame("date")}
+              />
               <EditableValue
                 label="Location"
                 value={game.location}

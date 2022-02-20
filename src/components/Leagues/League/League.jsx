@@ -1,7 +1,6 @@
 import { Button, Card, Typography, Grid, Box } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import useFetchData, { APITypes } from "../../../hooks/useFetchData";
-import buildSchedule from "../../../utilities/buildSchedule";
 import useStyles from "./styles.js";
 import { addModal } from "../../../actions/modals";
 import { displayTimeslot } from "../../../utilities/displayTimeslot";
@@ -28,18 +27,12 @@ export default function League({ leagueFromParent, leagueID }) {
   const handleMakeGames = (divisionID) => {
     const { divisions } = league;
     const division = divisions.find((d) => d._id === divisionID);
-    console.log(
-      buildSchedule(
-        league.seasonStart,
-        league.seasonEnd,
-        "1/1/2020 12:00",
-        "1/1/2020 14:00",
-        "Monday",
-        20,
-        division?.teams.map((t, k) => ({ ...t, _id: `${t._id}${k}` })),
+    dispatch(
+      addModal({
+        type: "MakeGames",
+        division,
         league,
-        "Anywhere"
-      )
+      })
     );
   };
 
