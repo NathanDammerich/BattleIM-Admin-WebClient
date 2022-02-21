@@ -25,16 +25,19 @@ const SportPicker = ({
   className?: string;
   style?: any;
 }) => {
-  const [sportList, setSportList] = React.useState<ISport[]>(sports ?? []);
+  const [sportApi, setSportListApi] = React.useState<ISport[]>();
+  const sportList = sportApi ?? sports;
   const sportMap = React.useMemo(() => {
     return Object.fromEntries(sportList.map((s) => [s._id, s]));
   }, [sportList]);
 
   React.useEffect(() => {
-    Sport.list()
-      .then(({ data }) => setSportList(data))
-      .catch(() => setSportList(sportList));
-  }, [sportList]);
+    if (!sportApi) {
+      Sport.list()
+        .then(({ data }) => setSportListApi(data))
+        .catch(() => setSportListApi(sports));
+    }
+  }, [sportApi, sports]);
 
   return (
     <PickerBase id={id} label={label}>
