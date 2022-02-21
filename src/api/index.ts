@@ -13,8 +13,8 @@ import {
 } from "./types";
 
 export const API = axios.create({
-  baseURL: "https://battleim-backend.herokuapp.com/",
-  //baseURL: "http://localhost:5000",
+  //baseURL: "https://battleim-backend.herokuapp.com/",
+  baseURL: "http://localhost:5000",
   withCredentials: true,
 });
 
@@ -72,7 +72,7 @@ export const Division: Omit<APIType<IDivision>, "list"> = {
   get: (id: string) => API.get(`/divisions/${id}`),
   create: (newDivision: IDivision) => API.post("/divisions", newDivision),
   update: (id: string, newDivision: IDivision) =>
-    API.patch(`/division/${id}`, newDivision),
+    API.patch(`/divisions/${id}`, newDivision),
 };
 
 export const getQuiz = (id: string) => API.get(`/quizzes/${id}`);
