@@ -65,7 +65,7 @@ export default function MakeLeague(props: IMakeLeague) {
       InputLabelProps: { shrink: true },
       className: classes.field,
     }),
-    [league, classes.field, handleUpdate]
+    [league, classes.field]
   );
 
   const defaultSport = league.sport?._id

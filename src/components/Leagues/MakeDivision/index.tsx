@@ -82,7 +82,7 @@ export default function MakeDivision(props: IMakeDivision) {
       InputLabelProps: { shrink: true },
       className: classes.field,
     }),
-    [division, classes.field, handleUpdate]
+    [division, classes.field]
   );
 
   return (
