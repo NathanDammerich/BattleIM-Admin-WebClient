@@ -23,11 +23,16 @@ export interface IMakeLeague {
 export default function MakeLeague(props: IMakeLeague) {
   const [league, setLeague] = React.useState<ILeague>(props.league);
 
-  const handleUpdate =
+  const handleUpdate = React.useCallback(
     (indexKey: keyof ILeague) =>
-    (event: { target: { value: ILeague[typeof indexKey] } }) => {
-      setLeague({ ...league, [indexKey]: event.target.value });
-    };
+      (event: { target: { value: ILeague[typeof indexKey] } }) => {
+        setLeague((prevLeague) => ({
+          ...prevLeague,
+          [indexKey]: event.target.value,
+        }));
+      },
+    []
+  );
 
   const handleSubmit = async () => {
     if (league._id) {
@@ -65,7 +70,7 @@ export default function MakeLeague(props: IMakeLeague) {
       InputLabelProps: { shrink: true },
       className: classes.field,
     }),
-    [league, classes.field]
+    [handleUpdate, league, classes.field]
   );
 
   const defaultSport = league.sport?._id

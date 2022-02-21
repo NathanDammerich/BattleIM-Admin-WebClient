@@ -30,12 +30,16 @@ export default function MakeDivision(props: IMakeDivision) {
     ? division.timeSlot
     : [];
 
-  const handleUpdate =
+  const handleUpdate = React.useCallback(
     (indexKey: keyof IDivision) =>
-    (event: { target: { value: IDivision[typeof indexKey] } }) => {
-      console.log(indexKey, event);
-      setDivision({ ...division, [indexKey]: event.target.value });
-    };
+      (event: { target: { value: IDivision[typeof indexKey] } }) => {
+        setDivision((prevDivision) => ({
+          ...prevDivision,
+          [indexKey]: event.target.value,
+        }));
+      },
+    []
+  );
 
   const handleTimeSlotChange =
     (indexTimeslot: number, indexKey: keyof ITimeslot) =>
@@ -82,7 +86,7 @@ export default function MakeDivision(props: IMakeDivision) {
       InputLabelProps: { shrink: true },
       className: classes.field,
     }),
-    [division, classes.field]
+    [handleUpdate, division, classes.field]
   );
 
   return (
