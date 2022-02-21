@@ -49,13 +49,16 @@ export default function MakeDivision(props: IMakeDivision) {
     };
 
   const handleSubmit = async () => {
-    console.log("SUBMIT", division);
-    if (division._id) {
-      // await Division.update(division._id, division);
-    } else {
-      await Division.create(division);
+    try {
+      if (division._id) {
+        await Division.update(division._id, division);
+      } else {
+        await Division.create(division);
+      }
+      props.onClose();
+    } catch (e) {
+      console.warn(e);
     }
-    props.onClose();
   };
   const classes = useStyles();
 

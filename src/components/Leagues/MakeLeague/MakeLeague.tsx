@@ -5,6 +5,7 @@ import {
   TextFieldProps,
   Select,
 } from "@material-ui/core";
+import moment from "moment";
 import React from "react";
 import { createLeague, updateLeague } from "../../../api";
 import { ILeague, ISport } from "../../../api/types";
@@ -45,7 +46,13 @@ export default function MakeLeague(props: IMakeLeague) {
       label,
       disabled,
     }: {
-      field: keyof ILeague;
+      field:
+        | "registrationOpen"
+        | "registrationClose"
+        | "seasonStart"
+        | "seasonEnd"
+        | "playoffStart"
+        | "playoffEnd";
       label: string;
       type?: string;
       disabled?: boolean;
@@ -54,7 +61,7 @@ export default function MakeLeague(props: IMakeLeague) {
       type,
       disabled,
       onChange: handleUpdate(field),
-      defaultValue: league[field],
+      defaultValue: moment(league[field]).format("YYYY-MM-DDTHH:mm:SS"),
       InputLabelProps: { shrink: true },
       className: classes.field,
     }),
@@ -81,6 +88,7 @@ export default function MakeLeague(props: IMakeLeague) {
           />
           <PickerBase id="make-league-league-type" label="Select League Type">
             <Select
+              value={league.description}
               fullWidth
               labelId="make-league-league-type"
               onChange={(e) =>
