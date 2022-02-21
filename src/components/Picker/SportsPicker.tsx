@@ -9,9 +9,9 @@ const SportPicker = ({
   onChange,
   defaultValue,
   allowNew,
-  id = 'sports-picker',
-  labelId = 'sports-picker',
-  label = 'Pick a sport',
+  id = "sports-picker",
+  labelId = "sports-picker",
+  label = "Pick a sport",
   className,
   style,
 }: {
@@ -34,7 +34,7 @@ const SportPicker = ({
     Sport.list()
       .then(({ data }) => setSportList(data))
       .catch(() => setSportList(sportList));
-  }, []);
+  }, [sportList]);
 
   return (
     <PickerBase id={id} label={label}>
