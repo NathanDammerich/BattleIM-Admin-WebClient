@@ -83,14 +83,14 @@ const buildSchedule = (
       .set("minute", start.get("minute"))
       .add(minuteIncrement, "minute")
       .add(weekIncrement, "weeks")
-      .toLocaleString();
+      .toISOString();
 
     return {
       _id: uuidv4(),
       homeTeam: teamMap[homeId],
       awayTeam: teamMap[awayId],
       date: gameDate,
-      leagueId: league._id,
+      leagueID: league._id,
       league: league.description,
       location,
     };

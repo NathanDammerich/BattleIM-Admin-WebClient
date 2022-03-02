@@ -21,7 +21,7 @@ export const API = axios.create({
 interface APIType<Item> {
   get: (id: string) => Promise<{ data: Item }>;
   create: (newValue: Item) => Promise<{ data: Item }>;
-  update: (id: string, updateValue: Item) => Promise<{ data: Item }>;
+  update: (id: string, updateValue: Partial<Item>) => Promise<{ data: Item }>;
   list: () => Promise<{ data: Item[] }>;
 }
 
@@ -62,15 +62,17 @@ export const createOrg = (newOrg: IOrg) => API.post("/orgs", newOrg);
 
 export const Sport: APIType<ISport> = {
   get: (id: string) => API.get(`/sports/${id}`),
-  update: (id: string, updatedSport: ISport) =>
+  update: (id: string, updatedSport: Partial<ISport>) =>
     API.patch(`/sports/${id}`, updatedSport),
   create: (newSport: ISport) => API.post("/sports", newSport),
   list: () => API.get("/sports"),
 };
 
-export const Division: Omit<APIType<IDivision>, "update" | "list"> = {
+export const Division: Omit<APIType<IDivision>, "list"> = {
   get: (id: string) => API.get(`/divisions/${id}`),
   create: (newDivision: IDivision) => API.post("/divisions", newDivision),
+  update: (id: string, newDivision: Partial<IDivision>) =>
+    API.patch(`/divisions/${id}`, newDivision),
 };
 
 export const getQuiz = (id: string) => API.get(`/quizzes/${id}`);

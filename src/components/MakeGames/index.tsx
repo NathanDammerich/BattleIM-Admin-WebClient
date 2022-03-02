@@ -9,16 +9,18 @@ import buildSchedule from "../../utilities/buildSchedule";
 import moment from "moment";
 import { RowClickedEvent } from "ag-grid-community";
 import { addModal } from "../../actions/modals";
-import { createGames } from "../../api";
+import { createGames, Division } from "../../api";
 
 const GamesCache: Record<string, IGame[]> = {};
 
 export default function MakeGames({
   league,
   division,
+  onClose,
 }: {
   league: ILeague;
   division: IDivision;
+  onClose: () => void;
 }) {
   const dispatch = useDispatch();
   const timeslots: ITimeslot[] = Array.isArray(division.timeSlot)
@@ -42,7 +44,7 @@ export default function MakeGames({
           timeslots[0].timeEnd.toString(),
           timeslots[0].day,
           20,
-          division?.teams.map((t, k) => ({ ...t, _id: `${t._id}${k}` })),
+          division?.teams,
           league,
           "Anywhere"
         )
@@ -52,8 +54,12 @@ export default function MakeGames({
 
   const handleSubmit = async () => {
     try {
-      const response = await createGames(Object.values(games));
-      console.log("SUCCESS", response);
+      const { data } = await createGames(Object.values(games));
+      const divisionResponse = await Division.update(division._id, {
+        games: [...division.games, ...data],
+        teams: [...division.teams],
+        timeSlot: timeslots,
+      });
     } catch (e) {
       console.warn(e);
     }
@@ -129,7 +135,10 @@ export default function MakeGames({
             ))}
           </AgGridReact>
         </div>
-        <Button onClick={handleSubmit}>Submit</Button>
+        <Button onClick={onClose}>Close</Button>
+        <Button variant="contained" color="primary" onClick={handleSubmit}>
+          Submit
+        </Button>
       </Card>
     </>
   );

@@ -26,7 +26,7 @@ export interface IGame {
   awayTeam: ITeam;
   results?: IResult;
   note?: string;
-  leagueId: string;
+  leagueID: string;
   day?: string;
   time?: string;
   homeAttendance?: string[];
