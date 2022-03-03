@@ -61,7 +61,7 @@ export default function Leagues() {
         type: "MakeLeague",
         id: undefined,
         league: {},
-        sports
+        sports,
       })
     );
   };
@@ -130,8 +130,9 @@ export default function Leagues() {
           onRowClicked={({ data }) => openLeague(data._id)}
           quickFilterText={quickFilter}
         >
-          {columns.map((c) => (
+          {columns.map((c, k) => (
             <AgGridColumn
+              key={k}
               sortable={true}
               resizable={true}
               filter={true}
