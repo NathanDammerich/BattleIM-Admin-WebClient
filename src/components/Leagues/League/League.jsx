@@ -9,11 +9,8 @@ import {
 } from "@material-ui/core";
 import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch } from "react-redux";
-<<<<<<< HEAD
 import useFetchData, { APITypes } from "../../../hooks/useFetchData";
-=======
 import buildSchedule from "../../../utilities/buildSchedule";
->>>>>>> main
 import useStyles from "./styles.js";
 import { addModal } from "../../../actions/modals";
 import { displayTimeslot } from "../../../utilities/displayTimeslot";
