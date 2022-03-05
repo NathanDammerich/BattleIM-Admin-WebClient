@@ -30,12 +30,16 @@ export default function MakeDivision(props: IMakeDivision) {
     ? division.timeSlot
     : [];
 
-  const handleUpdate =
+  const handleUpdate = React.useCallback(
     (indexKey: keyof IDivision) =>
-    (event: { target: { value: IDivision[typeof indexKey] } }) => {
-      console.log(indexKey, event);
-      setDivision({ ...division, [indexKey]: event.target.value });
-    };
+      (event: { target: { value: IDivision[typeof indexKey] } }) => {
+        setDivision((prevDivision) => ({
+          ...prevDivision,
+          [indexKey]: event.target.value,
+        }));
+      },
+    []
+  );
 
   const handleTimeSlotChange =
     (indexTimeslot: number, indexKey: keyof ITimeslot) =>
@@ -49,13 +53,16 @@ export default function MakeDivision(props: IMakeDivision) {
     };
 
   const handleSubmit = async () => {
-    console.log("SUBMIT", division);
-    if (division._id) {
-      // await Division.update(division._id, division);
-    } else {
-      await Division.create(division);
+    try {
+      if (division._id) {
+        await Division.update(division._id, division);
+      } else {
+        await Division.create(division);
+      }
+      props.onClose();
+    } catch (e) {
+      console.warn(e);
     }
-    props.onClose();
   };
   const classes = useStyles();
 
@@ -79,7 +86,7 @@ export default function MakeDivision(props: IMakeDivision) {
       InputLabelProps: { shrink: true },
       className: classes.field,
     }),
-    [division]
+    [handleUpdate, division, classes.field]
   );
 
   return (

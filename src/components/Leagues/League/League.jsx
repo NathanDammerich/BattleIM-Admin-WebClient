@@ -1,9 +1,18 @@
-import { Button, Card, Typography, Grid, Box } from "@material-ui/core";
+import React from "react";
+import {
+  Button,
+  Card,
+  Typography,
+  Grid,
+  Box,
+  IconButton,
+} from "@material-ui/core";
+import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch } from "react-redux";
-import useFetchData, { APITypes } from "../../../hooks/useFetchData";
 import useStyles from "./styles.js";
 import { addModal } from "../../../actions/modals";
 import { displayTimeslot } from "../../../utilities/displayTimeslot";
+import { getLeague } from "../../../api";
 
 const months = [
   "January",
@@ -21,8 +30,12 @@ const months = [
 ];
 
 export default function League({ leagueFromParent, leagueID }) {
-  const [league] = useFetchData(leagueFromParent, leagueID, APITypes.league);
+  const [league, setLeague] = React.useState(leagueFromParent);
   const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    getLeague(leagueID).then(({ data }) => setLeague(data));
+  }, [leagueID]);
 
   const handleMakeGames = (divisionID) => {
     const { divisions } = league;
@@ -55,17 +68,23 @@ export default function League({ leagueFromParent, leagueID }) {
       })
     );
   };
-  const handleCreateDivision = () => {
+  const openMakeDivision = (division, id) => {
     dispatch(
       addModal({
         type: "MakeDivision",
-        id: undefined,
-        division: {
-          league: league._id,
-        },
+        id,
+        division,
         league,
       })
     );
+  };
+  const handleCreateDivision = () => {
+    openMakeDivision({
+      league: league._id,
+    });
+  };
+  const handleEditDivision = (division) => () => {
+    openMakeDivision(division, division._id);
   };
 
   const classes = useStyles();
@@ -75,11 +94,12 @@ export default function League({ leagueFromParent, leagueID }) {
       {league && (
         <Card raised className={classes.card}>
           <Grid container className={classes.container}>
-            <Grid item xs={12}>
+            <Box className={`${classes.row}`}>
               <Typography variant="h5" color="primary" align="center">
                 {`${league.description} ${league.sport.description}`}
               </Typography>
-            </Grid>
+              <Button onClick={makeLeague}>Edit</Button>
+            </Box>
 
             <Grid item xs={12}>
               <Button onClick={handleRuleClick}>Rules</Button>
@@ -124,18 +144,15 @@ export default function League({ leagueFromParent, leagueID }) {
               <Button onClick={handleCreateDivision}>Make Division</Button>
             </Box>
             {league.divisions.map((division) => (
-              <Grid
-                item
-                xs={12}
-                key={division._id}
-                container
-                alignItems="center"
-              >
-                <Grid item xs={6}>
+              <Box className={classes.row} key={division._id}>
+                <Box className={classes.row}>
+                  <IconButton onClick={handleEditDivision(division)}>
+                    <EditIcon />
+                  </IconButton>
                   <Typography variant="body1" color="primary" align="left">
                     {displayTimeslot(division.timeSlot)}
                   </Typography>
-                </Grid>
+                </Box>
                 <Grid item xs={6}>
                   <Button
                     variant="text"
@@ -145,9 +162,8 @@ export default function League({ leagueFromParent, leagueID }) {
                     View Games
                   </Button>
                 </Grid>
-              </Grid>
+              </Box>
             ))}
-            <Button onClick={makeLeague}>Edit</Button>
           </Grid>
         </Card>
       )}

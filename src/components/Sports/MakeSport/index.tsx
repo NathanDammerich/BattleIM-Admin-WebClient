@@ -1,9 +1,4 @@
-import {
-  TextField,
-  Button,
-  Card,
-  TextFieldProps,
-} from "@material-ui/core";
+import { TextField, Button, Card, TextFieldProps } from "@material-ui/core";
 import React from "react";
 import { ISport } from "../../../api/types";
 import { Sport } from "../../../api";
@@ -59,7 +54,7 @@ export default function MakeSport(props: IMakeSport) {
       InputLabelProps: { shrink: true },
       className: classes.field,
     }),
-    [sport]
+    [sport, classes.field]
   );
 
   return (

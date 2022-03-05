@@ -9,9 +9,9 @@ const SportPicker = ({
   onChange,
   defaultValue,
   allowNew,
-  id = 'sports-picker',
-  labelId = 'sports-picker',
-  label = 'Pick a sport',
+  id = "sports-picker",
+  labelId = "sports-picker",
+  label = "Pick a sport",
   className,
   style,
 }: {
@@ -25,16 +25,19 @@ const SportPicker = ({
   className?: string;
   style?: any;
 }) => {
-  const [sportList, setSportList] = React.useState<ISport[]>(sports ?? []);
+  const [sportApi, setSportListApi] = React.useState<ISport[]>();
+  const sportList = sportApi ?? sports;
   const sportMap = React.useMemo(() => {
     return Object.fromEntries(sportList.map((s) => [s._id, s]));
   }, [sportList]);
 
   React.useEffect(() => {
-    Sport.list()
-      .then(({ data }) => setSportList(data))
-      .catch(() => setSportList(sportList));
-  }, []);
+    if (!sportApi) {
+      Sport.list()
+        .then(({ data }) => setSportListApi(data))
+        .catch(() => setSportListApi(sports));
+    }
+  }, [sportApi, sports]);
 
   return (
     <PickerBase id={id} label={label}>
