@@ -142,7 +142,7 @@ export default function League({ leagueFromParent, leagueID }) {
                     size="small"
                     onClick={() => handleMakeGames(division._id)}
                   >
-                    Create Games
+                    View Games
                   </Button>
                 </Grid>
               </Grid>
