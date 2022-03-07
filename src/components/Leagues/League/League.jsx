@@ -9,8 +9,6 @@ import {
 } from "@material-ui/core";
 import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch } from "react-redux";
-import useFetchData, { APITypes } from "../../../hooks/useFetchData";
-import buildSchedule from "../../../utilities/buildSchedule";
 import useStyles from "./styles.js";
 import { addModal } from "../../../actions/modals";
 import { displayTimeslot } from "../../../utilities/displayTimeslot";
@@ -155,13 +153,15 @@ export default function League({ leagueFromParent, leagueID }) {
                     {displayTimeslot(division.timeSlot)}
                   </Typography>
                 </Box>
-                <Button
-                  variant="text"
-                  size="small"
-                  onClick={() => handleMakeGames(division._id)}
-                >
-                  Create Games
-                </Button>
+                <Grid item xs={6}>
+                  <Button
+                    variant="text"
+                    size="small"
+                    onClick={() => handleMakeGames(division._id)}
+                  >
+                    View Games
+                  </Button>
+                </Grid>
               </Box>
             ))}
           </Grid>
