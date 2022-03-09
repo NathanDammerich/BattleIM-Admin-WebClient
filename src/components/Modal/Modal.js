@@ -5,13 +5,11 @@ import { useSelector, useDispatch } from "react-redux";
 
 import useStyles from "./styles";
 import GameCard from "../GameCard/GameCard";
-import TeamCard from "../Teams/TeamCard/TeamCard";
 import League from "../Leagues/League/League";
 import MakeLeague from "../Leagues/MakeLeague/MakeLeague";
 import MakeDivision from "../Leagues/MakeDivision";
 import Quiz from "../Quiz/Quiz";
 import { removeModal } from "../../actions/modals";
-import MakeTeam from "../Leagues/MakeTeam/MakeTeam";
 import MakeSport from "../Sports/MakeSport";
 import User from "../User/User";
 import EditScore from "../ScoreEditModal/ScoreEdit";
@@ -23,13 +21,11 @@ const modalTypeToComponent = {
   Game: GameCard,
   EditGame,
   MakeGames,
-  Team: TeamCard,
   League,
   MakeDivision,
   MakeLeague,
   MakeSport,
   Quiz,
-  MakeTeam,
   User,
   EditScore,
   Attendance,
@@ -39,17 +35,11 @@ const modalTypeToParams = {
   Game: (modal) => ({ gameID: modal.id }),
   MakeGames: (modal) => modal,
   EditGame: (modal) => modal,
-  Team: (modal) => ({
-    teamFromParent: null,
-    teamID: modal.id,
-    startExpanded: true,
-  }),
   League: (modal) => ({ leagueID: modal.id }),
   MakeDivision: (modal) => modal,
   MakeLeague: (modal) => modal,
   MakeSport: (modal) => modal,
   Quiz: (modal) => ({ quizID: modal.id }),
-  MakeTeam: (modal) => ({ divisionID: modal.id }),
   User: () => ({}),
   EditScore: (modal) => modal,
   Attendance: (modal) => modal,
