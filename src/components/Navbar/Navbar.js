@@ -63,15 +63,6 @@ const Navbar = ({ setPage, page }) => {
               >
                 Leagues
               </Button>
-              <Button
-                variant="text"
-                className={
-                  page === 3 ? classes.buttonActive : classes.buttonNotActive
-                }
-                onClick={() => setPage(3)}
-              >
-                Users
-              </Button>
             </Container>
           </Grid>
           <Grid item xs={12} sm={2}>

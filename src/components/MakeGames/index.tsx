@@ -107,7 +107,6 @@ export default function MakeGames({
   };
 
   GamesCache[division._id] = Object.values(games);
-  console.log(division);
 
   const columns: AgGridColumnProps[] = [
     {
